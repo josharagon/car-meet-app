@@ -25,7 +25,11 @@ const MainMap = () => {
           image={require("../assets/map-marker.png")}
           title="Test Location"
           description="test desc"
-        ></Marker>
+        >
+          {/* <Callout tooltip>
+            <View></View>
+          </Callout> */}
+        </Marker>
       </MapView>
     </View>
   );
