@@ -175,9 +175,7 @@ const MainMap = () => {
               resizeMode="cover"
             />
             <View style={styles.textContent}>
-              <Text numberOfLines={1} style={styles.cardtitle}>
-                {meet.title}
-              </Text>
+              <Text numberOfLines={1} style={styles.cardtitle}></Text>
               <Text numberOfLines={1} style={styles.cardDescription}>
                 {meet.name}
               </Text>
@@ -188,7 +186,7 @@ const MainMap = () => {
                       latitude: meet.coordinate.latitude,
                       longitude: meet.coordinate.longitude,
                       title: meet.name, // optional
-                      googleForceLatLon: false, // optionally force GoogleMaps to use the latlon for the query instead of the title
+                      googleForceLatLon: true, // optionally force GoogleMaps to use the latlon for the query instead of the title
                       alwaysIncludeGoogle: true, // optional, true will always add Google Maps to iOS and open in Safari, even if app is not installed (default: false)
                       naverCallerName: "com.example.myapp",
                     });
@@ -196,7 +194,7 @@ const MainMap = () => {
                   style={[
                     styles.signIn,
                     {
-                      borderColor: "#32C0FA",
+                      borderColor: "#FFFFFF",
                       borderWidth: 1,
                     },
                   ]}
@@ -205,7 +203,7 @@ const MainMap = () => {
                     style={[
                       styles.textSign,
                       {
-                        color: "#32C0FA",
+                        color: "#FFFFFF",
                       },
                     ]}
                   >
@@ -284,7 +282,7 @@ const styles = StyleSheet.create({
   card: {
     padding: 10,
     elevation: 2,
-    backgroundColor: "#FFF",
+    backgroundColor: "#121212",
     borderTopLeftRadius: 5,
     borderTopRightRadius: 5,
     marginHorizontal: 10,
@@ -313,7 +311,7 @@ const styles = StyleSheet.create({
   },
   cardDescription: {
     fontSize: 12,
-    color: "#444",
+    color: "#FFFFFF",
   },
   markerWrap: {
     alignItems: "center",
