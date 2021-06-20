@@ -25,11 +25,53 @@ const SPACING_FOR_CARD_INSET = width * 0.1 - 10;
 const MainMap = () => {
   let mapIndex = 0;
   let mapAnimation = new Animated.Value(0);
+  const _map = React.useRef(null);
   const _scrollView = React.useRef(null);
+
+  useEffect(() => {
+    mapAnimation.addListener(({ value }) => {
+      let index = Math.floor(value / CARD_WIDTH + 0.3); // animate 30% away from landing on the next item
+      if (index >= onGoingMeets.length) {
+        index = onGoingMeets.length - 1;
+      }
+      if (index <= 0) {
+        index = 0;
+      }
+
+      clearTimeout(regionTimeout);
+
+      const regionTimeout = setTimeout(() => {
+        if (mapIndex !== index) {
+          mapIndex = index;
+          const { coordinate } = onGoingMeets[index];
+          _map.current.animateToRegion(
+            {
+              ...coordinate,
+              latitudeDelta: 0.04864195044303443,
+              longitudeDelta: 0.040142817690068,
+            },
+            350
+          );
+        }
+      }, 10);
+    });
+  });
+
+  const onMarkerPress = (mapEventData) => {
+    const markerID = mapEventData._targetInst.return.key;
+
+    let x = markerID * CARD_WIDTH + markerID * 20;
+    if (Platform.OS === "ios") {
+      x = x - SPACING_FOR_CARD_INSET;
+    }
+
+    _scrollView.current.scrollTo({ x: x, y: 0, animated: true });
+  };
 
   return (
     <View style={styles.container}>
       <MapView
+        ref={_map}
         provider={PROVIDER_GOOGLE}
         style={styles.map}
         lightModeAllowed={false}
@@ -43,7 +85,25 @@ const MainMap = () => {
           longitudeDelta: 0.0421,
         }}
       >
-        <MeetMarkers />
+        {onGoingMeets.map((meet) => {
+          return (
+            <Marker
+              key={meet.name}
+              coordinate={{
+                latitude: meet.coordinate.latitude,
+                longitude: meet.coordinate.longitude,
+              }}
+              image={require("../assets/map-marker.png")}
+              title={meet.name}
+              description="Starts in 5 minutes."
+              onPress={(e) => onMarkerPress(e)}
+            >
+              {/* <Callout tooltip>
+      <View></View>
+    </Callout> */}
+            </Marker>
+          );
+        })}
       </MapView>
       <Animated.ScrollView
         ref={_scrollView}
@@ -93,7 +153,16 @@ const MainMap = () => {
               </Text>
               <View style={styles.button}>
                 <TouchableOpacity
-                  onPress={() => {}}
+                  onPress={() => {
+                    showLocation({
+                      latitude: meet.lat,
+                      longitude: meet.long,
+                      title: meet.name, // optional
+                      googleForceLatLon: false, // optionally force GoogleMaps to use the latlon for the query instead of the title
+                      alwaysIncludeGoogle: true, // optional, true will always add Google Maps to iOS and open in Safari, even if app is not installed (default: false)
+                      naverCallerName: "com.example.myapp",
+                    });
+                  }}
                   style={[
                     styles.signIn,
                     {
