@@ -57,6 +57,22 @@ const MainMap = () => {
     });
   });
 
+  const interpolations = onGoingMeets.map((meet, index) => {
+    const inputRange = [
+      (index - 1) * CARD_WIDTH,
+      index * CARD_WIDTH,
+      (index + 1) * CARD_WIDTH,
+    ];
+
+    const scale = mapAnimation.interpolate({
+      inputRange,
+      outputRange: [1, 1.5, 1],
+      extrapolate: "clamp",
+    });
+
+    return { scale };
+  });
+
   const onMarkerPress = (mapEventData) => {
     const markerID = mapEventData._targetInst.return.key;
 
@@ -85,7 +101,14 @@ const MainMap = () => {
           longitudeDelta: 0.0421,
         }}
       >
-        {onGoingMeets.map((meet) => {
+        {onGoingMeets.map((meet, index) => {
+          const scaleStyle = {
+            transform: [
+              {
+                scale: interpolations[index].scale,
+              },
+            ],
+          };
           return (
             <Marker
               key={meet.name}
@@ -93,11 +116,18 @@ const MainMap = () => {
                 latitude: meet.coordinate.latitude,
                 longitude: meet.coordinate.longitude,
               }}
-              image={require("../assets/map-marker.png")}
+              // image={require("../assets/map-marker.png")}
               title={meet.name}
               description="Starts in 5 minutes."
               onPress={(e) => onMarkerPress(e)}
             >
+              <Animated.View style={[styles.markerWrap]}>
+                <Animated.Image
+                  source={require("../assets/map-marker.png")}
+                  style={[styles.marker, scaleStyle]}
+                  resizeMode="cover"
+                />
+              </Animated.View>
               {/* <Callout tooltip>
       <View></View>
     </Callout> */}
@@ -249,10 +279,10 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   endPadding: {
-    // paddingRight: width - CARD_WIDTH,
+    paddingRight: width - CARD_WIDTH,
   },
   card: {
-    // padding: 10,
+    padding: 10,
     elevation: 2,
     backgroundColor: "#FFF",
     borderTopLeftRadius: 5,
