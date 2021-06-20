@@ -74,7 +74,7 @@ const MainMap = () => {
   });
 
   const onMarkerPress = (mapEventData) => {
-    const markerID = mapEventData._targetInst.return.key;
+    const markerID = mapEventData._targetInst.return.index;
 
     let x = markerID * CARD_WIDTH + markerID * 20;
     if (Platform.OS === "ios") {
