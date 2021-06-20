@@ -9,8 +9,8 @@ const MeetMarkers = () => {
       <Marker
         key={meet.name}
         coordinate={{
-          latitude: meet.lat,
-          longitude: meet.long,
+          latitude: meet.coordinate.latitude,
+          longitude: meet.coordinate.longitude,
         }}
         image={require("../assets/map-marker.png")}
         title={meet.name}

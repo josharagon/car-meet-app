@@ -185,8 +185,8 @@ const MainMap = () => {
                 <TouchableOpacity
                   onPress={() => {
                     showLocation({
-                      latitude: meet.lat,
-                      longitude: meet.long,
+                      latitude: meet.coordinate.latitude,
+                      longitude: meet.coordinate.longitude,
                       title: meet.name, // optional
                       googleForceLatLon: false, // optionally force GoogleMaps to use the latlon for the query instead of the title
                       alwaysIncludeGoogle: true, // optional, true will always add Google Maps to iOS and open in Safari, even if app is not installed (default: false)
