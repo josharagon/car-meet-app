@@ -1,14 +1,9 @@
 import React from "react";
 import { showLocation } from "react-native-map-link";
 import { Marker } from "react-native-maps";
+import { onGoingMeets } from "../onGoingMeets";
 
 const MeetMarkers = () => {
-  const onGoingMeets = [
-    { name: "Meet1", lat: 39.96124, long: -104.99162 },
-    { name: "Meet2", lat: 39.766121, long: -104.780296 },
-    { name: "Meet3", lat: 39.76852, long: -104.8103 },
-  ];
-
   const meetToMarkers = onGoingMeets.map((meet) => {
     return (
       <Marker
