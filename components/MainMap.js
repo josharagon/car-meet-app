@@ -1,15 +1,18 @@
 import React from "react";
 import { StyleSheet, Text, View, Dimensions } from "react-native";
-import MapView, { MapKit, Marker, Callout } from "react-native-maps";
+import MapView, { PROVIDER_GOOGLE, Marker, Callout } from "react-native-maps";
+import mapDarkTheme from "../map styles/mapDarkTheme";
 
 const MainMap = () => {
   return (
     <View style={styles.container}>
       <MapView
-        provider={MapKit}
+        provider={PROVIDER_GOOGLE}
         style={styles.map}
-        // showsUserLocation={true}
-        // followsUserLocation={true}
+        lightModeAllowed={false}
+        customMapStyle={mapDarkTheme}
+        showsUserLocation
+        followsUserLocation
         region={{
           latitude: 39.973851,
           longitude: -104.86436,
