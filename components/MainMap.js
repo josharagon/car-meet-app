@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, Dimensions } from "react-native";
 import MapView, { PROVIDER_GOOGLE, Marker, Callout } from "react-native-maps";
 import mapDarkTheme from "../map styles/mapDarkTheme";
+import { showLocation } from "react-native-map-link";
+import MeetMarkers from "./MeetMarkers";
 
 const MainMap = () => {
   return (
@@ -20,19 +22,7 @@ const MainMap = () => {
           longitudeDelta: 0.0421,
         }}
       >
-        <Marker
-          coordinate={{
-            latitude: 39.973851,
-            longitude: -104.86436,
-          }}
-          image={require("../assets/map-marker.png")}
-          title="Test Location"
-          description="test desc"
-        >
-          {/* <Callout tooltip>
-            <View></View>
-          </Callout> */}
-        </Marker>
+        <MeetMarkers />
       </MapView>
     </View>
   );
@@ -52,3 +42,5 @@ const styles = StyleSheet.create({
     height: Dimensions.get("window").height,
   },
 });
+
+console.log();
