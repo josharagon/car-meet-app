@@ -1,7 +1,13 @@
 import "react-native-gesture-handler";
-import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
-import { StyleSheet, Text, View, Button } from "react-native";
+import {
+  StyleSheet,
+  StatusBar,
+  SafeAreaView,
+  Text,
+  View,
+  Button,
+} from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 
 import MainMap from "./components/MainMap.js";
@@ -29,6 +35,14 @@ export default function App() {
 
   return (
     <NavigationContainer>
+      <StatusBar
+        style={styles.statusBarBackground}
+        barStyle="light-content"
+        hidden={false}
+        backgroundColor="#00BCD4"
+        translucent={true}
+        marginBottom={"100px"}
+      />
       <Tabs />
     </NavigationContainer>
   );

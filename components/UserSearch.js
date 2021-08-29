@@ -1,8 +1,12 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, Button } from "react-native";
+import { StyleSheet, Text, View, Button, SafeAreaView } from "react-native";
 
 const UserSearch = () => {
-  return <Text>Search Menu</Text>;
+  return (
+    <SafeAreaView>
+      <Text>Search</Text>
+    </SafeAreaView>
+  );
 };
 
 export default UserSearch;

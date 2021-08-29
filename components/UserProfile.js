@@ -1,8 +1,12 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, Button } from "react-native";
+import { StyleSheet, Text, View, Button, SafeAreaView } from "react-native";
 
 const UserProfile = () => {
-  return <Text>Profile</Text>;
+  return (
+    <SafeAreaView>
+      <Text>Profile</Text>
+    </SafeAreaView>
+  );
 };
 
 export default UserProfile;
