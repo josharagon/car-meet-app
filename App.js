@@ -36,14 +36,13 @@ export default function App() {
   return (
     <NavigationContainer>
       <StatusBar
-        style={styles.statusBarBackground}
         barStyle="light-content"
         hidden={false}
-        backgroundColor="#00BCD4"
+        backgroundColor="#212121"
         translucent={true}
-        marginBottom={"100px"}
       />
       <Tabs />
+      <SafeAreaView style={{ backgroundColor: "#212121" }} />
     </NavigationContainer>
   );
 }

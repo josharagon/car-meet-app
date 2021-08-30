@@ -15,6 +15,8 @@ const Tabs = () => {
         activeTintColor: "#FFFFFF",
         activeBackgroundColor: "#202020",
         inactiveBackgroundColor: "#202020",
+        backgroundColor: "#212121",
+        borderTopWidth: 0,
       }}
       options={{ headerShown: false }}
     >
