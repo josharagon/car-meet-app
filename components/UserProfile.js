@@ -106,9 +106,10 @@ const UserProfile = () => {
             <ModificationCard type="Turbo" name="Garrett 2860R Gen ii" />
             <ModificationCard type="Exhaust" name="MBRP Cat-Back" />
             <ModificationCard type="Intake" name="2JR Cowl" />
-            <ModificationCard type="Suspension" name="2JR Cowl" />
+            <ModificationCard type="Suspension" name="BC Coilovers" />
             <ModificationCard type="Wheels" name="Fifteen 52 Integrales" />
             <ModificationCard type="Tires" name="Pilot Sport Cup 2s" />
+            <ModificationCard type="Intercooler" name="Whoosh V3" />
           </ScrollView>
         </View>
       </View>

@@ -4,7 +4,7 @@ import { StyleSheet, Text, View, Button, SafeAreaView } from "react-native";
 const UserSearch = () => {
   return (
     <SafeAreaView>
-      <Text>Search</Text>
+      
     </SafeAreaView>
   );
 };
