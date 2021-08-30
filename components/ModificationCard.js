@@ -33,6 +33,7 @@ const ModificationCard = ({ type, name }) => {
         alignItems: "center",
         borderRadius: 10,
         margin: 2,
+        boxShadow: "0px 1px 5px 0px #676767",
       }}
     >
       <Image source={allParts[type].url} style={{ width: 60, height: 60 }} />
