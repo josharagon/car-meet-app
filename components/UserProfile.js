@@ -9,9 +9,7 @@ import {
   Image,
   ScrollView,
 } from "react-native";
-import MediaPreview from "./MediaPreview";
 import ModificationCard from "./ModificationCard";
-import Gallery from "react-native-image-gallery";
 
 const UserProfile = () => {
   return (
