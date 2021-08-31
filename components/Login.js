@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -9,89 +9,72 @@ import {
   ActivityIndicator,
 } from "react-native";
 import firebase from "../database/firebase";
+import { useNavigation } from "@react-navigation/native";
 
-export default class Login extends Component {
-  constructor() {
-    super();
-    this.state = {
-      email: "",
-      password: "",
-      isLoading: false,
-    };
-  }
+const Login = ({ loggedIn, setLoggedIn }) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  updateInputVal = (val, prop) => {
-    const state = this.state;
-    state[prop] = val;
-    this.setState(state);
-  };
-
-  userLogin = () => {
-    if (this.state.email === "" && this.state.password === "") {
+  const userLogin = () => {
+    if (email === "" && password === "") {
       Alert.alert("Enter details to signin!");
     } else {
-      this.setState({
-        isLoading: true,
-      });
+      console.log(loggedIn);
+      setIsLoading(true);
       firebase
         .auth()
-        .signInWithEmailAndPassword(this.state.email, this.state.password)
+        .signInWithEmailAndPassword(email, password)
         .then((res) => {
           console.log(res);
           console.log("User logged-in successfully!");
-          this.setState({
-            isLoading: false,
-            email: "",
-            password: "",
-          });
-          this.props.navigation.navigate("Dashboard");
+          setIsLoading(false);
+          setEmail("");
+          setPassword("");
         })
-        .catch((error) => this.setState({ errorMessage: error.message }));
+        .catch((error) => setError(error.message));
     }
   };
 
-  render() {
-    const { navigation } = this.props;
+  const { navigation } = useNavigation();
 
-    if (this.state.isLoading) {
-      return (
-        <View style={styles.preloader}>
-          <ActivityIndicator size="large" color="#9E9E9E" />
-        </View>
-      );
-    }
+  if (isLoading) {
     return (
-      <View style={styles.container}>
-        <TextInput
-          style={styles.inputStyle}
-          placeholder="Email"
-          value={this.state.email}
-          onChangeText={(val) => this.updateInputVal(val, "email")}
-        />
-        <TextInput
-          style={styles.inputStyle}
-          placeholder="Password"
-          value={this.state.password}
-          onChangeText={(val) => this.updateInputVal(val, "password")}
-          maxLength={15}
-          secureTextEntry={true}
-        />
-        <Button
-          color="#3740FE"
-          title="Signin"
-          onPress={() => this.userLogin()}
-        />
-
-        <Text
-          style={styles.loginText}
-          onPress={() => navigation.navigate("Register")}
-        >
-          Don't have account? Click here to signup
-        </Text>
+      <View style={styles.preloader}>
+        <ActivityIndicator size="large" color="#9E9E9E" />
       </View>
     );
   }
-}
+  return (
+    <View style={styles.container}>
+      <TextInput
+        style={styles.inputStyle}
+        placeholder="Email"
+        value={email}
+        onChangeText={(input) => setEmail(input)}
+      />
+      <TextInput
+        style={styles.inputStyle}
+        placeholder="Password"
+        value={password}
+        onChangeText={(input) => setPassword(input)}
+        maxLength={15}
+        secureTextEntry={true}
+      />
+      <Button color="#3740FE" title="Signin" onPress={() => userLogin()} />
+
+      <Text
+        style={styles.loginText}
+        onPress={() => navigation.navigate("Register")}
+      >
+        Don't have account? Click here to signup
+      </Text>
+    </View>
+  );
+};
+
+export default Login;
 
 const styles = StyleSheet.create({
   container: {

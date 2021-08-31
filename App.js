@@ -54,7 +54,11 @@ export default function App() {
           >
             <Stack.Screen name="Landing" component={Landing} />
             <Stack.Screen name="Register" component={Register} />
-            <Stack.Screen name="Login" component={Login} />
+            <Stack.Screen name="Login">
+              {(props) => (
+                <Login loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
+              )}
+            </Stack.Screen>
           </Stack.Navigator>
         </NavigationContainer>
       )}
