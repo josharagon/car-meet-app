@@ -38,10 +38,12 @@ const Landing = ({ navigation }) => {
         />
         <Button
           title="Register"
+          color="white"
           onPress={() => navigation.navigate(Register)}
         ></Button>
         <Button
           title="Login"
+          color="white"
           onPress={() => navigation.navigate(Login)}
         ></Button>
       </View>
