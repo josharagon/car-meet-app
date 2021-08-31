@@ -1,49 +1,76 @@
 import "react-native-gesture-handler";
-import React, { useState } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import {
   StyleSheet,
   StatusBar,
   SafeAreaView,
   Text,
+  TextInput,
   View,
   Button,
 } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+
+import * as firebase from "firebase";
+import "firebase/firestore";
 
 import MainMap from "./components/MainMap.js";
 import UserSearch from "./components/UserSearch";
 import UserProfile from "./components/UserProfile";
 import Tabs from "./components/Tabs";
+import Register from "./components/Register.js";
+import Landing from "./components/Landing.js";
+import Login from "./components/Login.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDhuYwu_RThc6vfOMsBDRZjEv8uvXQxwbk",
+  authDomain: "carmeets-317400.firebaseapp.com",
+  projectId: "carmeets-317400",
+  storageBucket: "carmeets-317400.appspot.com",
+  messagingSenderId: "619142821412",
+  appId: "1:619142821412:web:b9c9a888c6e75d1a2b0ab1",
+};
+
+if (firebase.apps.length === 0) {
+  firebase.initializeApp(firebaseConfig);
+}
 
 export default function App() {
-  const [user, setUser] = useState({
-    id: 69,
-    name: "Josh",
-    car: {
-      year: 2018,
-      make: "Ford",
-      model: "Fiesta",
-      trim: "ST",
-      mods: {
-        intake: { brand: "injen", model: "short ram", linK: null },
-        intercooler: { brand: "whoosh", model: "v1", linK: null },
-        turbo: { brand: "garrett", model: "2860r gen ii", linK: null },
-      },
-    },
-    memberSince: new Date(),
-  });
+  const Stack = createNativeStackNavigator();
+
+  const [loggedIn, setLoggedIn] = useState(false);
 
   return (
-    <NavigationContainer>
-      <StatusBar
-        barStyle="light-content"
-        hidden={false}
-        backgroundColor="#212121"
-        translucent={true}
-      />
-      <Tabs />
-      <SafeAreaView style={{ backgroundColor: "#212121" }} />
-    </NavigationContainer>
+    <Fragment>
+      {loggedIn === false && (
+        <NavigationContainer>
+          <Stack.Navigator
+            initialRouteName="Landing"
+            screenOptions={{
+              headerShown: false,
+            }}
+          >
+            <Stack.Screen name="Landing" component={Landing} />
+            <Stack.Screen name="Register" component={Register} />
+            <Stack.Screen name="Login" component={Login} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      )}
+      {loggedIn && (
+        <NavigationContainer>
+          <StatusBar
+            barStyle="light-content"
+            hidden={false}
+            backgroundColor="#212121"
+            translucent={true}
+          />
+          <Tabs />
+          <SafeAreaView style={{ backgroundColor: "#212121" }} />
+        </NavigationContainer>
+      )}
+    </Fragment>
   );
 }
 
