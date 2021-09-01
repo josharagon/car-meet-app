@@ -23,24 +23,34 @@ import Tabs from "./components/Tabs";
 import Register from "./components/Register.js";
 import Landing from "./components/Landing.js";
 import Login from "./components/Login.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyDhuYwu_RThc6vfOMsBDRZjEv8uvXQxwbk",
-  authDomain: "carmeets-317400.firebaseapp.com",
-  projectId: "carmeets-317400",
-  storageBucket: "carmeets-317400.appspot.com",
-  messagingSenderId: "619142821412",
-  appId: "1:619142821412:web:b9c9a888c6e75d1a2b0ab1",
-};
+import { firebaseConfig } from "./database/firebase.js";
 
 if (firebase.apps.length === 0) {
   firebase.initializeApp(firebaseConfig);
 }
 
+const db = firebase.firestore();
+
+db.collection("users")
+  .get()
+  .then((snapshot) => {
+    snapshot.docs.forEach((doc) => {
+      console.log(doc.data());
+    });
+  });
+
 export default function App() {
   const Stack = createNativeStackNavigator();
 
   const [loggedIn, setLoggedIn] = useState(false);
+
+  firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+      setLoggedIn(true);
+    } else {
+      setLoggedIn(false);
+    }
+  });
 
   return (
     <Fragment>

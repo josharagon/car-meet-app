@@ -19,8 +19,9 @@ import Login from "./Login";
 const Landing = ({ navigation }) => {
   return (
     <ImageBackground
-      source={require("../assets/carmeet.jpg")}
+      source={require("../assets/carmeet3.jpg")}
       resizeMode="cover"
+      resizeMethod="auto"
       style={{
         height: "100%",
         width: "100%",

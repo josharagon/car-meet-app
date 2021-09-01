@@ -10,8 +10,12 @@ import {
   ScrollView,
 } from "react-native";
 import ModificationCard from "./ModificationCard";
+import firebase from "firebase";
 
 const UserProfile = () => {
+  const logOut = () => {
+    firebase.auth().signOut();
+  };
   return (
     <ScrollView style={styles.statusBar}>
       <View style={styles.container}>
@@ -110,8 +114,10 @@ const UserProfile = () => {
             <ModificationCard type="Wheels" name="Fifteen 52 Integrales" />
             <ModificationCard type="Tires" name="Pilot Sport Cup 2s" />
             <ModificationCard type="Intercooler" name="Whoosh V3" />
+            <ModificationCard type="Downpipe" name="Whoosh V1" />
           </ScrollView>
         </View>
+        <Button title="sign out" onPress={() => logOut()} />
       </View>
     </ScrollView>
   );

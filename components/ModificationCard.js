@@ -19,6 +19,7 @@ const ModificationCard = ({ type, name }) => {
     Wheels: { url: require("../assets/wheels.png") },
     Intercooler: { url: require("../assets/intercooler.png") },
     Suspension: { url: require("../assets/suspension.png") },
+    Downpipe: { url: require("../assets/downpipe.png") },
   };
 
   return (

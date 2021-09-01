@@ -8,7 +8,7 @@ import {
   Alert,
   ActivityIndicator,
 } from "react-native";
-import firebase from "../database/firebase";
+import firebase from "firebase";
 import { useNavigation } from "@react-navigation/native";
 
 const Login = ({ loggedIn, setLoggedIn }) => {
