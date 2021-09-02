@@ -31,13 +31,13 @@ if (firebase.apps.length === 0) {
 
 const db = firebase.firestore();
 
-db.collection("users")
-  .get()
-  .then((snapshot) => {
-    snapshot.docs.forEach((doc) => {
-      console.log(doc.data());
-    });
-  });
+// db.collection("users")
+//   .get()
+//   .then((snapshot) => {
+//     snapshot.docs.forEach((doc) => {
+//       console.log(doc.data());
+//     });
+//   });
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -47,6 +47,7 @@ export default function App() {
   firebase.auth().onAuthStateChanged((user) => {
     if (user) {
       setLoggedIn(true);
+      console.log(firebase.auth().currentUser);
     } else {
       setLoggedIn(false);
     }
