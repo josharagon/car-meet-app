@@ -23,13 +23,21 @@ import Tabs from "./components/Tabs";
 import Register from "./components/Register.js";
 import Landing from "./components/Landing.js";
 import Login from "./components/Login.js";
-import { firebaseConfig } from "./database/firebase.js";
 
-if (firebase.apps.length === 0) {
-  firebase.initializeApp(firebaseConfig);
-}
+import { firebaseConfig } from "./database/firebase.js";
+import { getStorage } from "firebase/storage";
+import { getDatabase, ref, set } from "firebase/database";
+import { getAuth } from "firebase/auth";
+
+// if (firebase.apps.length === 0) {
+//   firebase.initializeApp(firebaseConfig);
+// }
 
 const db = firebase.firestore();
+
+// const database =  getDatabase();
+
+// console.log(database);
 
 // db.collection("users")
 //   .get()
@@ -47,11 +55,15 @@ export default function App() {
   firebase.auth().onAuthStateChanged((user) => {
     if (user) {
       setLoggedIn(true);
-      console.log(firebase.auth().currentUser);
     } else {
       setLoggedIn(false);
     }
   });
+
+  // const auth = getAuth();
+  // const user = auth.currentUser;
+
+  console.log(firebase.default.auth().currentUser);
 
   return (
     <Fragment>
