@@ -123,7 +123,7 @@ const MainMap = () => {
             >
               <Animated.View style={[styles.markerWrap]}>
                 <Animated.Image
-                  source={require("../assets/map-marker.png")}
+                  source={require("../assets/images/map-marker.png")}
                   style={[styles.marker, scaleStyle]}
                   resizeMode="cover"
                 />

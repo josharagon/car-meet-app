@@ -10,16 +10,16 @@ import {
 } from "react-native";
 
 const ModificationCard = ({ type, name }) => {
-  let itemUrl = `../assets/${type}.png`;
+  let itemUrl = `../assets/images/${type}.png`;
   const allParts = {
-    Turbo: { url: require("../assets/turbo.png") },
-    Intake: { url: require("../assets/intake.png") },
-    Exhaust: { url: require("../assets/exhaust.png") },
-    Tires: { url: require("../assets/tires.png") },
-    Wheels: { url: require("../assets/wheels.png") },
-    Intercooler: { url: require("../assets/intercooler.png") },
-    Suspension: { url: require("../assets/suspension.png") },
-    Downpipe: { url: require("../assets/downpipe.png") },
+    Turbo: { url: require("../assets/images/turbo.png") },
+    Intake: { url: require("../assets/images/intake.png") },
+    Exhaust: { url: require("../assets/images/exhaust.png") },
+    Tires: { url: require("../assets/images/tires.png") },
+    Wheels: { url: require("../assets/images/wheels.png") },
+    Intercooler: { url: require("../assets/images/intercooler.png") },
+    Suspension: { url: require("../assets/images/suspension.png") },
+    Downpipe: { url: require("../assets/images/downpipe.png") },
   };
 
   return (

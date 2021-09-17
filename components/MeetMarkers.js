@@ -12,7 +12,7 @@ const MeetMarkers = () => {
           latitude: meet.coordinate.latitude,
           longitude: meet.coordinate.longitude,
         }}
-        image={require("../assets/map-marker.png")}
+        image={require("../assets/images/map-marker.png")}
         title={meet.name}
         description="Starts in 5 minutes."
       >

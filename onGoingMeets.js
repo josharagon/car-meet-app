@@ -1,7 +1,7 @@
 const Images = [
-  { image: require("./assets/meet1.jpg") },
-  { image: require("./assets/meet2.jpg") },
-  { image: require("./assets/meet3.jpg") },
+  { image: require("./assets/images/meet1.jpg") },
+  { image: require("./assets/images/meet2.jpg") },
+  { image: require("./assets/images/meet3.jpg") },
 ];
 
 export const onGoingMeets = [

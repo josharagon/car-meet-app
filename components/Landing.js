@@ -19,7 +19,7 @@ import Login from "./Login";
 const Landing = ({ navigation }) => {
   return (
     <ImageBackground
-      source={require("../assets/carmeet3.jpg")}
+      source={require("../assets/images/carmeet3.jpg")}
       resizeMode="cover"
       resizeMethod="auto"
       style={{
@@ -31,7 +31,7 @@ const Landing = ({ navigation }) => {
       <View style={styles.child}>
         <SafeAreaView style={{ backgroundColor: "#212121" }} />
         <Image
-          source={require("../assets/meets.png")}
+          source={require("../assets/images/meets.png")}
           style={{
             width: 350,
             resizeMode: "contain",

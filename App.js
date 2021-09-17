@@ -23,6 +23,7 @@ import Tabs from "./components/Tabs";
 import Register from "./components/Register.js";
 import Landing from "./components/Landing.js";
 import Login from "./components/Login.js";
+import Welcome from "./components/Welcome.js";
 
 import { firebaseConfig } from "./database/firebase.js";
 import { getStorage } from "firebase/storage";
@@ -63,7 +64,7 @@ export default function App() {
   // const auth = getAuth();
   // const user = auth.currentUser;
 
-  console.log(firebase.default.auth().currentUser);
+  // console.log(firebase.default.auth().currentUser.uid);
 
   return (
     <Fragment>
@@ -85,6 +86,9 @@ export default function App() {
           </Stack.Navigator>
         </NavigationContainer>
       )}
+      {/* {loggedIn && 
+      
+      <Welcome />} */}
       {loggedIn && (
         <NavigationContainer>
           <StatusBar

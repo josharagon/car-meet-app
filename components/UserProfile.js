@@ -31,7 +31,7 @@ const UserProfile = () => {
           @st.joshy
         </Text>
         <Image
-          source={require("../assets/fist.png")}
+          source={require("../assets/images/fist.png")}
           style={{ width: 300, height: 165, marginTop: 25 }}
         />
         <Text
