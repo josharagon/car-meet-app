@@ -1,4 +1,6 @@
 import React, { useState, Fragment } from "react";
+import GallerySwiper from "react-native-gallery-swiper";
+
 import {
   StyleSheet,
   Text,
@@ -30,10 +32,44 @@ const UserProfile = () => {
         >
           @st.joshy
         </Text>
-        <Image
+        <GallerySwiper
+          enableScale={false}
+          style={{ width: 400, height: 200, marginTop: 25 }}
+          images={[
+            // Version *1.1.0 update (or greater versions):
+            // Can be used with different image object fieldnames.
+            // Ex. source, source.uri, uri, URI, url, URL
+
+            {
+              source: require("../assets/images/fist.png"),
+              dimensions: { width: 1080, height: 1920 },
+            },
+            {
+              uri: "https://uploads.tapatalk-cdn.com/20160625/513a7cd3e4ec0accc1e50fb88d6afa56.jpg",
+              dimensions: { width: 1080, height: 1920 },
+            },
+            {
+              uri: "https://www.fiestast.org/attachments/img_2081-2-jpg.8151/",
+              dimensions: { width: 1080, height: 1920 },
+            },
+            {
+              uri: "https://uploads.tapatalk-cdn.com/20161122/cced47cce4e881ef4f5cfe8b10416722.jpg",
+              dimensions: { width: 1080, height: 1920 },
+            },
+            {
+              url: "https://i.pinimg.com/originals/2f/2f/79/2f2f796cf2d528bc5841e04e5cb58be4.jpg",
+              dimensions: { width: 1080, height: 1920 },
+            },
+            {
+              uri: "https://i.redd.it/htzdmgavntm51.jpg",
+              dimensions: { width: 1080, height: 1920 },
+            },
+          ]}
+        />
+        {/* <Image
           source={require("../assets/images/fist.png")}
           style={{ width: 300, height: 165, marginTop: 25 }}
-        />
+        /> */}
         <Text
           style={{
             textAlign: "center",
