@@ -4,6 +4,7 @@ import { Icon } from "react-native-elements";
 
 import {
   StyleSheet,
+  RefreshControl,
   Text,
   View,
   Button,
@@ -22,15 +23,7 @@ UserProfile = () => {
     firebase.auth().signOut();
   };
 
-  const getModCards = async () => {
-    await currentCar;
-    setLoaded(true);
-    currentCar.modifications.map((modification) => {
-      return (
-        <ModificationCard type={modification.type} name={modification.name} />
-      );
-    });
-  };
+  let currentImages = currentCar.images;
 
   return (
     <ScrollView style={styles.statusBar} scrollEnabled={false}>
@@ -60,22 +53,45 @@ UserProfile = () => {
             style={{ width: 25, height: 25 }}
           />
         </View>
-        <View style={{ position: "absolute", top: "49%", right: 15 }}>
+
+        <View style={{ position: "absolute", top: "50%", left: 1 }}>
+          <Icon
+            name="arrow-left"
+            size={40}
+            color="white"
+            onPress={() => {
+              setCurrentCar(cars[0]);
+              setLoaded(true);
+              currentImages = cars[0].images;
+              setTimeout(() => {
+                setLoaded(false);
+              }, 1);
+            }}
+          />
+        </View>
+
+        <View style={{ position: "absolute", top: "50%", right: 1 }}>
           <Icon
             name="arrow-right"
             size={40}
             color="white"
             onPress={() => {
               setCurrentCar(cars[1]);
-              console.log(currentCar);
+              setLoaded(true);
+              currentImages = cars[1].images;
+              setTimeout(() => {
+                setLoaded(false);
+              }, 1);
             }}
           />
         </View>
-        <GallerySwiper
-          enableScale={false}
-          style={{ width: 400, height: 200, marginTop: 25 }}
-          images={currentCar.images}
-        />
+        {loaded === false && (
+          <GallerySwiper
+            enableScale={false}
+            style={{ width: 400, height: 200, marginTop: 25 }}
+            images={currentCar.images}
+          />
+        )}
 
         <Text
           style={{
@@ -85,7 +101,7 @@ UserProfile = () => {
             marginTop: 5,
           }}
         >
-          Platinum White
+          {currentCar.color}
         </Text>
         <Text
           style={{
@@ -151,7 +167,14 @@ UserProfile = () => {
             showsHorizontalScrollIndicator={false}
             style={{ width: "100%" }}
           >
-            {loaded === false && getModCards()}
+            {currentCar.modifications.map((modification) => {
+              return (
+                <ModificationCard
+                  type={modification.type}
+                  name={modification.name}
+                />
+              );
+            })}
             {/* <ModificationCard type="Turbo" name="Garrett 2860R Gen ii" />
             <ModificationCard type="Exhaust" name="MBRP Cat-Back" />
             <ModificationCard type="Intake" name="2JR Cowl" />
@@ -245,10 +268,6 @@ const cars = [
       },
       {
         uri: "https://www.motortrend.com/uploads/sites/5/2020/05/2021-Toyota-Supra-4-Cylinder-1.jpg?fit=around%7C960:600",
-        dimensions: { width: 1080, height: 1920 },
-      },
-      {
-        url: "https://i.pinimg.com/originals/2f/2f/79/2f2f796cf2d528bc5841e04e5cb58be4.jpg",
         dimensions: { width: 1080, height: 1920 },
       },
       {
