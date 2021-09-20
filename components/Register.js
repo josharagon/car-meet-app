@@ -69,7 +69,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import firebase from "../database/firebase";
+import firebase from "firebase";
 
 import Login from "./Login";
 
@@ -121,12 +121,14 @@ const Register = () => {
         onChangeText={(text) => setDisplayName(text)}
       />
       <TextInput
+        autoCapitalize="none"
         style={styles.inputStyle}
         placeholder="Email"
         value={email}
         onChangeText={(text) => setEmail(text)}
       />
       <TextInput
+        autoCapitalize="none"
         style={styles.inputStyle}
         placeholder="Password"
         value={password}

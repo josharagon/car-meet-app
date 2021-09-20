@@ -52,6 +52,7 @@ const Login = ({ loggedIn, setLoggedIn }) => {
         style={styles.inputStyle}
         placeholder="Email"
         value={email}
+        autoCapitalize={"none"}
         onChangeText={(input) => setEmail(input)}
       />
       <TextInput

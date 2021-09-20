@@ -6,7 +6,7 @@ const Images = [
 
 export const onGoingMeets = [
   {
-    name: "Meet1",
+    name: "Nation Wide",
     coordinate: {
       latitude: 39.96124,
       longitude: -104.99162,
@@ -14,7 +14,7 @@ export const onGoingMeets = [
     img: Images[0].image,
   },
   {
-    name: "Meet2",
+    name: "DKC",
     coordinate: {
       latitude: 39.766121,
       longitude: -104.780296,
@@ -22,7 +22,7 @@ export const onGoingMeets = [
     img: Images[1].image,
   },
   {
-    name: "Meet3",
+    name: "SLS",
     coordinate: {
       latitude: 39.76852,
       longitude: -104.8103,
