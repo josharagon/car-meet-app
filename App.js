@@ -78,6 +78,7 @@ export default function App() {
           >
             <Stack.Screen name="Landing" component={Landing} />
             <Stack.Screen name="Register" component={Register} />
+            <Stack.Screen name="UserProfile" component={UserProfile} />
             <Stack.Screen name="Login">
               {(props) => (
                 <Login loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
@@ -86,9 +87,7 @@ export default function App() {
           </Stack.Navigator>
         </NavigationContainer>
       )}
-      {/* {loggedIn && 
-      
-      <Welcome />} */}
+
       {loggedIn && (
         <NavigationContainer>
           <StatusBar

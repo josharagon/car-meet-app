@@ -17,18 +17,18 @@ import {
 } from "react-native";
 import ModificationCard from "./ModificationCard";
 import firebase from "firebase";
+import { useNavigation } from "@react-navigation/native";
 
-UserProfile = () => {
+const UserProfile = () => {
   const [currentCar, setCurrentCar] = useState(cars[0]);
   const [loaded, setLoaded] = useState(false);
   const windowWidth = Dimensions.get("window").width;
   const windowHeight = Dimensions.get("window").height;
-  console.log(windowHeight, windowWidth);
+  const { navigation } = useNavigation();
+
   const logOut = () => {
     firebase.auth().signOut();
   };
-
-  let currentImages = currentCar.images;
 
   return (
     <ScrollView style={styles.statusBar} scrollEnabled={false}>
@@ -57,9 +57,16 @@ UserProfile = () => {
             source={require("../assets/images/verified.png")}
             style={{ height: 20, width: 20, position: "absolute", left: 160 }}
           />
-          <Image
+          {/* <Image
             source={require("../assets/images/settings.png")}
             style={{ width: 25, height: 25 }}
+          /> */}
+          <Icon
+            name="cog-outline"
+            type="material-community"
+            size={25}
+            color="white"
+            onPress={() => navigation.navigate("Welcome")}
           />
         </View>
         {cars.indexOf(currentCar) !== 0 && (
@@ -207,6 +214,7 @@ UserProfile = () => {
                 <ModificationCard
                   type={modification.type}
                   name={modification.name}
+                  key={modification.name}
                 />
               );
             })}
