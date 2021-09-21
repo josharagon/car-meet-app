@@ -6,10 +6,14 @@ import {
   Button,
   SafeAreaView,
   StatusBar,
+  Dimensions,
   Image,
 } from "react-native";
 
 const ModificationCard = ({ type, name }) => {
+  const windowWidth = Dimensions.get("window").width;
+  const windowHeight = Dimensions.get("window").height;
+
   let itemUrl = `../assets/images/${type}.png`;
   const allParts = {
     Turbo: { url: require("../assets/images/turbo.png") },
@@ -25,7 +29,8 @@ const ModificationCard = ({ type, name }) => {
   return (
     <View
       style={{
-        width: 105,
+        width: windowWidth / 3.57142857143,
+        height: windowWidth / 2.86,
         padding: 10,
         backgroundColor: "#2A2A2A",
         display: "flex",
@@ -37,7 +42,15 @@ const ModificationCard = ({ type, name }) => {
         boxShadow: "0px 1px 5px 0px #676767",
       }}
     >
-      <Image source={allParts[type].url} style={{ width: 60, height: 60 }} />
+      {/* width 6.25 height 11.1166666667 */}
+      <Image
+        source={allParts[type].url}
+        style={{
+          width: windowWidth / 6.25,
+          height: windowHeight / 11.1166666667,
+          resizeMode: "contain",
+        }}
+      />
       <Text style={{ color: "white", textAlign: "center" }}>{`${name}`}</Text>
       <Text style={{ color: "white", textAlign: "center" }}>{`${type}`}</Text>
     </View>

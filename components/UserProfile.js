@@ -9,8 +9,10 @@ import {
   View,
   Button,
   SafeAreaView,
+  Dimensions,
   StatusBar,
   Image,
+  ActivityIndicator,
   ScrollView,
 } from "react-native";
 import ModificationCard from "./ModificationCard";
@@ -19,6 +21,9 @@ import firebase from "firebase";
 UserProfile = () => {
   const [currentCar, setCurrentCar] = useState(cars[0]);
   const [loaded, setLoaded] = useState(false);
+  const windowWidth = Dimensions.get("window").width;
+  const windowHeight = Dimensions.get("window").height;
+  console.log(windowHeight, windowWidth);
   const logOut = () => {
     firebase.auth().signOut();
   };
@@ -49,42 +54,48 @@ UserProfile = () => {
             @st.joshy's Garage
           </Text>
           <Image
+            source={require("../assets/images/verified.png")}
+            style={{ height: 20, width: 20, position: "absolute", left: 160 }}
+          />
+          <Image
             source={require("../assets/images/settings.png")}
             style={{ width: 25, height: 25 }}
           />
         </View>
-
-        <View style={{ position: "absolute", top: "50%", left: 1 }}>
-          <Icon
-            name="arrow-left"
-            size={40}
-            color="white"
-            onPress={() => {
-              setCurrentCar(cars[0]);
-              setLoaded(true);
-              currentImages = cars[0].images;
-              setTimeout(() => {
-                setLoaded(false);
-              }, 1);
-            }}
-          />
-        </View>
-
-        <View style={{ position: "absolute", top: "50%", right: 1 }}>
-          <Icon
-            name="arrow-right"
-            size={40}
-            color="white"
-            onPress={() => {
-              setCurrentCar(cars[1]);
-              setLoaded(true);
-              currentImages = cars[1].images;
-              setTimeout(() => {
-                setLoaded(false);
-              }, 1);
-            }}
-          />
-        </View>
+        {cars.indexOf(currentCar) !== 0 && (
+          <View style={{ position: "absolute", top: "50%", left: 1 }}>
+            <Icon
+              name="arrow-left"
+              size={40}
+              color="white"
+              onPress={() => {
+                setCurrentCar(cars[cars.indexOf(currentCar) - 1]);
+                setLoaded(true);
+                currentImages = cars[0].images;
+                setTimeout(() => {
+                  setLoaded(false);
+                }, 1);
+              }}
+            />
+          </View>
+        )}
+        {cars.indexOf(currentCar) < cars.length - 1 && (
+          <View style={{ position: "absolute", top: "50%", right: 1 }}>
+            <Icon
+              name="arrow-right"
+              size={40}
+              color="white"
+              onPress={() => {
+                setCurrentCar(cars[cars.indexOf(currentCar) + 1]);
+                setLoaded(true);
+                currentImages = cars[1].images;
+                setTimeout(() => {
+                  setLoaded(false);
+                }, 1);
+              }}
+            />
+          </View>
+        )}
         {loaded === false && (
           <GallerySwiper
             enableScale={false}
@@ -92,13 +103,20 @@ UserProfile = () => {
             images={currentCar.images}
           />
         )}
+        {loaded === true && (
+          <ActivityIndicator
+            size="large"
+            color="white"
+            style={{ width: 400, height: 200, marginTop: 25 }}
+          />
+        )}
 
         <Text
           style={{
             textAlign: "center",
             color: "white",
-            fontSize: 18,
-            marginTop: 5,
+            fontSize: windowHeight / 40,
+            marginTop: windowHeight / 60,
           }}
         >
           {currentCar.color}
@@ -107,7 +125,7 @@ UserProfile = () => {
           style={{
             textAlign: "center",
             color: "white",
-            fontSize: 18,
+            fontSize: windowHeight / 40,
           }}
         >
           {`${currentCar.year} ${currentCar.make} ${currentCar.model} ${currentCar.trim}`}
@@ -118,10 +136,18 @@ UserProfile = () => {
             display: "flex",
             flexDirection: "column",
             width: "87.09%",
-            marginTop: 20,
+            marginTop: windowHeight / 40,
           }}
         >
-          <Text style={{ textAlign: "left", color: "white" }}>Power</Text>
+          <Text
+            style={{
+              textAlign: "left",
+              color: "white",
+              fontSize: windowHeight / 50,
+            }}
+          >
+            Power
+          </Text>
           <View
             style={{
               display: "flex",
@@ -133,8 +159,9 @@ UserProfile = () => {
               style={{
                 color: "white",
                 backgroundColor: "#2A2A2A",
-                padding: 8,
-                borderRadius: 10,
+                padding: windowHeight / 60,
+                borderRadius: 13,
+                fontSize: windowHeight / 50,
               }}
             >
               {`${currentCar.power.hp} HP`}
@@ -143,8 +170,9 @@ UserProfile = () => {
               style={{
                 color: "white",
                 backgroundColor: "#2A2A2A",
-                padding: 8,
-                borderRadius: 10,
+                padding: windowHeight / 60,
+                borderRadius: 13,
+                fontSize: windowHeight / 50,
               }}
             >
               {`${currentCar.power.ft_lb} FT-LB`}
@@ -159,7 +187,14 @@ UserProfile = () => {
             marginTop: 20,
           }}
         >
-          <Text style={{ textAlign: "left", color: "white" }}>
+          <Text
+            style={{
+              textAlign: "left",
+              color: "white",
+              fontSize: windowHeight / 50,
+              marginTop: windowHeight / 40,
+            }}
+          >
             Modifications
           </Text>
           <ScrollView
@@ -175,17 +210,9 @@ UserProfile = () => {
                 />
               );
             })}
-            {/* <ModificationCard type="Turbo" name="Garrett 2860R Gen ii" />
-            <ModificationCard type="Exhaust" name="MBRP Cat-Back" />
-            <ModificationCard type="Intake" name="2JR Cowl" />
-            <ModificationCard type="Suspension" name="BC Coilovers" />
-            <ModificationCard type="Wheels" name="Fifteen 52 Integrales" />
-            <ModificationCard type="Tires" name="Pilot Sport Cup 2s" />
-            <ModificationCard type="Intercooler" name="Whoosh V3" />
-            <ModificationCard type="Downpipe" name="Whoosh V1" /> */}
           </ScrollView>
         </View>
-        <Button title="sign out" onPress={() => logOut()} />
+        {/* <Button title="sign out" onPress={() => logOut()} /> */}
       </View>
     </ScrollView>
   );
@@ -276,7 +303,7 @@ const cars = [
       },
     ],
     modifications: [
-      { type: "Downpipe", name: "Azrotec" },
+      { type: "Downpipe", name: "Akrapovic" },
       { type: "Turbo", name: "Pure 800" },
       { type: "Exhaust", name: "HKS Dual" },
       { type: "Intake", name: "Injen" },
