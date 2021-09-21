@@ -102,6 +102,8 @@ const UserProfile = ({ navigation }) => {
         {loaded === false && (
           <GallerySwiper
             enableScale={false}
+            sensitiveScroll={false}
+            resistantStrVertical={999}
             style={{ width: 400, height: 200, marginTop: 25 }}
             images={currentCar.images}
           />
