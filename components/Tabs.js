@@ -2,16 +2,12 @@ import React from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
-
-import { Ionicons } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "react-native-vector-icons";
 
 import MainMap from "./MainMap.js";
 import UserSearch from "./UserSearch";
 import UserProfile from "./UserProfile";
 import Settings from "./Settings";
-
-import { setStatusBarHidden } from "expo-status-bar";
 
 const Tab = createBottomTabNavigator();
 
@@ -33,7 +29,7 @@ function ProfileStackScreen() {
 }
 const ProfileStack = createStackNavigator();
 
-const Tabs = ({ navigation }) => {
+const Tabs = () => {
   return (
     <Tab.Navigator
       tabBarOptions={{

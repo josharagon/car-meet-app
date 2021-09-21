@@ -16,7 +16,6 @@ import {
 } from "react-native";
 import ModificationCard from "./ModificationCard";
 import firebase from "firebase";
-import { useNavigation } from "@react-navigation/native";
 
 const UserProfile = ({ navigation }) => {
   const [currentCar, setCurrentCar] = useState(cars[0]);
