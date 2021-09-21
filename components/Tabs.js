@@ -32,14 +32,21 @@ const ProfileStack = createStackNavigator();
 const Tabs = () => {
   return (
     <Tab.Navigator
-      tabBarOptions={{
-        showLabel: false,
-        activeTintColor: "#FFFFFF",
-        activeBackgroundColor: "#202020",
-        inactiveBackgroundColor: "#202020",
-        backgroundColor: "#212121",
-        borderTopWidth: 0,
+      screenOptions={{
+        tabBarActiveTintColor: "#FFFFFF",
+        tabBarActiveBackgroundColor: "#202020",
+        tabBarInactiveBackgroundColor: "#202020",
+        tabBarLabel: "",
+        tabBarStyle: [{ display: "flex", borderTopWidth: 0 }, null],
       }}
+      // tabBarOptions={{
+      //   showLabel: false,
+      //   activeTintColor: "#FFFFFF",
+      //   activeBackgroundColor: "#202020",
+      //   inactiveBackgroundColor: "#202020",
+      //   backgroundColor: "#212121",
+      //   borderTopWidth: 0,
+      // }}
       options={{ headerShown: false }}
     >
       <Tab.Screen
