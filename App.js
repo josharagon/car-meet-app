@@ -23,7 +23,6 @@ import Tabs from "./components/Tabs";
 import Register from "./components/Register.js";
 import Landing from "./components/Landing.js";
 import Login from "./components/Login.js";
-import Welcome from "./components/Welcome.js";
 
 import { firebaseConfig } from "./database/firebase.js";
 import { getStorage } from "firebase/storage";
@@ -78,7 +77,8 @@ export default function App() {
           >
             <Stack.Screen name="Landing" component={Landing} />
             <Stack.Screen name="Register" component={Register} />
-            <Stack.Screen name="UserProfile" component={UserProfile} />
+            <Stack.Screen name="Tabs" component={Tabs} />
+
             <Stack.Screen name="Login">
               {(props) => (
                 <Login loggedIn={loggedIn} setLoggedIn={setLoggedIn} />

@@ -1,7 +1,6 @@
 import React, { useState, Fragment } from "react";
 import GallerySwiper from "react-native-gallery-swiper";
 import { Icon } from "react-native-elements";
-
 import {
   StyleSheet,
   RefreshControl,
@@ -19,12 +18,11 @@ import ModificationCard from "./ModificationCard";
 import firebase from "firebase";
 import { useNavigation } from "@react-navigation/native";
 
-const UserProfile = () => {
+const UserProfile = ({ navigation }) => {
   const [currentCar, setCurrentCar] = useState(cars[0]);
   const [loaded, setLoaded] = useState(false);
   const windowWidth = Dimensions.get("window").width;
   const windowHeight = Dimensions.get("window").height;
-  const { navigation } = useNavigation();
 
   const logOut = () => {
     firebase.auth().signOut();
@@ -57,16 +55,15 @@ const UserProfile = () => {
             source={require("../assets/images/verified.png")}
             style={{ height: 20, width: 20, position: "absolute", left: 160 }}
           />
-          {/* <Image
-            source={require("../assets/images/settings.png")}
-            style={{ width: 25, height: 25 }}
-          /> */}
           <Icon
             name="cog-outline"
             type="material-community"
             size={25}
             color="white"
-            onPress={() => navigation.navigate("Welcome")}
+            onPress={() => {
+              navigation.navigate("Settings");
+              console.log("clicked");
+            }}
           />
         </View>
         {cars.indexOf(currentCar) !== 0 && (
