@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import firebase from "firebase";
 import { useNavigation } from "@react-navigation/native";
+import { Icon } from "react-native-elements";
 
 const Login = ({ loggedIn, setLoggedIn }) => {
   const [email, setEmail] = useState("");
@@ -48,12 +49,24 @@ const Login = ({ loggedIn, setLoggedIn }) => {
   }
   return (
     <View style={styles.container}>
+      <Icon
+        name="arrow-left"
+        type="font-awesome"
+        color="#9E9E9E"
+        size={25}
+        style={{
+          position: "absolute",
+          top: "5%",
+        }}
+      />
       <TextInput
         style={styles.inputStyle}
         placeholder="Email"
         value={email}
         autoCapitalize={"none"}
         onChangeText={(input) => setEmail(input)}
+        placeholderTextColor="white"
+        color="white"
       />
       <TextInput
         style={styles.inputStyle}
@@ -62,6 +75,8 @@ const Login = ({ loggedIn, setLoggedIn }) => {
         onChangeText={(input) => setPassword(input)}
         maxLength={15}
         secureTextEntry={true}
+        placeholderTextColor="white"
+        color="white"
       />
       <Button color="#3740FE" title="Signin" onPress={() => userLogin()} />
 
@@ -84,14 +99,14 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "center",
     padding: 35,
-    backgroundColor: "#fff",
+    backgroundColor: "#202020",
   },
   inputStyle: {
     width: "100%",
     marginBottom: 15,
     paddingBottom: 15,
     alignSelf: "center",
-    borderColor: "#ccc",
+    borderColor: "#fff",
     borderBottomWidth: 1,
   },
   loginText: {

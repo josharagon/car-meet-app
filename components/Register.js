@@ -119,6 +119,8 @@ const Register = () => {
         placeholder="Name"
         value={displayName}
         onChangeText={(text) => setDisplayName(text)}
+        placeholderTextColor="white"
+        color="white"
       />
       <TextInput
         autoCapitalize="none"
@@ -126,11 +128,15 @@ const Register = () => {
         placeholder="Email"
         value={email}
         onChangeText={(text) => setEmail(text)}
+        placeholderTextColor="white"
+        color="white"
       />
       <TextInput
         autoCapitalize="none"
         style={styles.inputStyle}
         placeholder="Password"
+        placeholderTextColor="white"
+        color="white"
         value={password}
         onChangeText={(text) => setPassword(text)}
         minLength={6}
@@ -158,14 +164,14 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "center",
     padding: 35,
-    backgroundColor: "#fff",
+    backgroundColor: "#202020",
   },
   inputStyle: {
     width: "100%",
     marginBottom: 15,
     paddingBottom: 15,
     alignSelf: "center",
-    borderColor: "#ccc",
+    borderColor: "#fff",
     borderBottomWidth: 1,
   },
   loginText: {
