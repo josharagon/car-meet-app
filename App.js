@@ -28,6 +28,7 @@ import { firebaseConfig } from "./database/firebase.js";
 import { getStorage } from "firebase/storage";
 import { getDatabase, ref, set } from "firebase/database";
 import { getAuth } from "firebase/auth";
+import WelcomeNewUser from "./components/WelcomeNewUser.js";
 
 if (firebase.apps.length === 0) {
   firebase.initializeApp(firebaseConfig);
@@ -50,13 +51,30 @@ db.collection("users")
 export default function App() {
   const Stack = createNativeStackNavigator();
 
+  const [currentUser, setCurrentUser] = useState(null);
   const [loggedIn, setLoggedIn] = useState(false);
+  const [accountType, setAccountType] = useState(false);
+
+  const accountSetUp = () => {
+    var ref = firebase.database().ref(`users/${user.uid}`);
+    ref.once("value").then(function (snapshot) {
+      var name = snapshot.child("username").val().exists();
+      if (name) {
+        setAccountType(true);
+      } else {
+        setAccountType(false);
+      }
+    });
+  };
 
   firebase.auth().onAuthStateChanged((user) => {
     if (user) {
+      setCurrentUser(user);
       setLoggedIn(true);
+      // accountSetUp();
     } else {
       setLoggedIn(false);
+      setCurrentUser(null);
     }
   });
 
@@ -88,7 +106,11 @@ export default function App() {
         </NavigationContainer>
       )}
 
-      {loggedIn && (
+      {loggedIn && !accountType && (
+        <WelcomeNewUser userName={currentUser.displayName} />
+      )}
+
+      {loggedIn && accountType && (
         <NavigationContainer>
           <StatusBar
             barStyle="light-content"
