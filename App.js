@@ -29,9 +29,9 @@ import { getStorage } from "firebase/storage";
 import { getDatabase, ref, set } from "firebase/database";
 import { getAuth } from "firebase/auth";
 
-// if (firebase.apps.length === 0) {
-//   firebase.initializeApp(firebaseConfig);
-// }
+if (firebase.apps.length === 0) {
+  firebase.initializeApp(firebaseConfig);
+}
 
 const db = firebase.firestore();
 
@@ -39,13 +39,13 @@ const db = firebase.firestore();
 
 // console.log(database);
 
-// db.collection("users")
-//   .get()
-//   .then((snapshot) => {
-//     snapshot.docs.forEach((doc) => {
-//       console.log(doc.data());
-//     });
-//   });
+db.collection("users")
+  .get()
+  .then((snapshot) => {
+    snapshot.docs.forEach((doc) => {
+      console.log(doc.data());
+    });
+  });
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -63,7 +63,7 @@ export default function App() {
   // const auth = getAuth();
   // const user = auth.currentUser;
 
-  // console.log(firebase.default.auth().currentUser.uid);
+  // console.log(firebase.default.auth().currentUser.displayName);
 
   return (
     <Fragment>

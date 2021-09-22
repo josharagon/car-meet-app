@@ -16,6 +16,7 @@ import {
 } from "react-native";
 import ModificationCard from "./ModificationCard";
 import firebase from "firebase";
+import { Swipeable } from "react-native-gesture-handler";
 
 const UserProfile = ({ navigation }) => {
   const [currentCar, setCurrentCar] = useState(cars[0]);
@@ -103,9 +104,14 @@ const UserProfile = ({ navigation }) => {
           <GallerySwiper
             enableScale={false}
             sensitiveScroll={false}
-            resistantStrVertical={999}
-            style={{ width: 400, height: 200, marginTop: 25 }}
+            style={{
+              width: 400,
+              height: 200,
+              marginTop: 25,
+              backgroundColor: "#212121",
+            }}
             images={currentCar.images}
+            enableTranslate={false}
           />
         )}
         {loaded === true && (
