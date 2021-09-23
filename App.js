@@ -107,7 +107,7 @@ export default function App() {
       )}
 
       {loggedIn && !accountType && (
-        <WelcomeNewUser userName={currentUser.displayName} />
+        <WelcomeNewUser name={currentUser.displayName} />
       )}
 
       {loggedIn && accountType && (
