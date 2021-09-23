@@ -20,7 +20,7 @@ import { TextInput } from "react-native-paper";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 
 const WelcomeNewUser = ({ name }) => {
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(0);
   const [input, setInput] = useState("");
   const [userName, setUserName] = useState("");
   const [selectedMake, setSelectedMake] = useState("acura");
@@ -149,25 +149,41 @@ const WelcomeNewUser = ({ name }) => {
     >
       <SafeAreaView />
       {page === 0 && (
-        <Animated.Text
+        <Animated.ScrollView
+          scrollEnabled={false}
+          keyboardShouldPersistTaps="handled"
           style={{
             color: "#ffffff",
             fontSize: 66,
             lineHeight: 80,
             opacity: fadeAnim,
           }}
+          justifyContent="center"
+          alignItems="center"
         >
-          Welcome to {"\n"} Meets {"\n"} {name}!
-        </Animated.Text>
+          <Text
+            style={{
+              color: "#ffffff",
+              fontSize: 66,
+              lineHeight: 80,
+            }}
+          >
+            Welcome to {"\n"} Meets {"\n"} {name}!
+          </Text>
+        </Animated.ScrollView>
       )}
       {page === 1 && (
-        <Animated.View
+        <Animated.ScrollView
+          scrollEnabled={false}
+          keyboardShouldPersistTaps="handled"
           style={{
             color: "#ffffff",
             fontSize: 66,
             lineHeight: 80,
             opacity: fadeAnim,
           }}
+          justifyContent="center"
+          alignItems="center"
         >
           <Text
             style={{
@@ -178,26 +194,47 @@ const WelcomeNewUser = ({ name }) => {
           >
             choose your username:
           </Text>
-          <Input
-            placeholderTextColor="#7d7d7d"
-            color="#ffffff"
-            value={input}
-            placeholder="username"
-            paddingLeft={20}
-            onChangeText={(text) => setInput(text.replace(/\s/g, ""))}
-          />
-          <Text
-            style={{
-              position: "relative",
-              bottom: 56,
-              left: 10,
-              fontSize: 20,
-              color: "#ffffff",
-            }}
-          >
-            @
-          </Text>
-        </Animated.View>
+          <View style={{ position: "relative" }}>
+            <TextInput
+              style={{
+                height: 40,
+                margin: 12,
+                borderWidth: 1,
+                padding: 10,
+                paddingLeft: 13,
+                backgroundColor: "#353535",
+                height: 50,
+                width: windowWidth - 50,
+                fontSize: 12,
+                alignSelf: "center",
+              }}
+              placeholder="username"
+              onChangeText={(text) => setInput(text.replace(/ /g, ""))}
+              value={input}
+              placeholderTextColor="#7d7d7d"
+              selectionColor="#ffffff"
+              theme={{
+                colors: {
+                  text: "white",
+                  primary: "white",
+                  underlineColor: "transparent",
+                  background: "#003489",
+                },
+              }}
+            />
+            <Text
+              style={{
+                position: "absolute",
+                bottom: 39,
+                left: 35,
+                fontSize: 15,
+                color: "#7d7d7d",
+              }}
+            >
+              @
+            </Text>
+          </View>
+        </Animated.ScrollView>
       )}
       {page === 2 && (
         <Animated.ScrollView
