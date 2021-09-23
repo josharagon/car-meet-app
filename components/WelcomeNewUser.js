@@ -33,17 +33,32 @@ const WelcomeNewUser = ({ name }) => {
   const [selectedTrim, setSelectedTrim] = useState("");
   const [selectedTransmission, setSelectedTransmission] = useState("manual");
   const [garage, setGarage] = useState([]);
-
   const [disabled, setDisabled] = useState(false);
 
   const windowWidth = Dimensions.get("window").width;
   const windowHeight = Dimensions.get("window").height;
+
+  const dbRef = firebase.database().ref();
 
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
   const capitalize = (s) => {
     if (typeof s !== "string") return "";
     return s.charAt(0).toUpperCase() + s.slice(1);
+  };
+
+  const checkUserNameAvailability = async () => {
+    await dbRef;
+    dbRef
+      .child("users")
+      .get()
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          Object.values(snapshot.val()).map((user) => {
+            user.usernamename;
+          });
+        }
+      });
   };
 
   const formatText = (text) => {
@@ -433,6 +448,7 @@ const WelcomeNewUser = ({ name }) => {
       <Button
         title="Next"
         onPress={() => {
+          // console.log(checkUserNameAvailability());
           setDisabled(false);
           fadeOut();
           setTimeout(() => {
