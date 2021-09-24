@@ -9,7 +9,10 @@ import {
   Dimensions,
   Animated,
   FlatList,
+  Alert,
 } from "react-native";
+
+import ModificationCard from "./ModificationCard";
 
 import { Picker } from "@react-native-picker/picker";
 import firebase from "firebase";
@@ -20,9 +23,10 @@ import { TextInput } from "react-native-paper";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 
 const WelcomeNewUser = ({ name }) => {
-  const [page, setPage] = useState(0);
-  const [input, setInput] = useState("");
+  const [page, setPage] = useState(1);
+  const [userNameAvailable, setUserNameAvailable] = useState(null);
   const [userName, setUserName] = useState("");
+  const [selectedUserName, setSelectedUserName] = useState("");
   const [selectedMake, setSelectedMake] = useState("acura");
   const [selectedModel, setSelectedModel] = useState("llx");
   const [selectedYear, setSelectedYear] = useState("");
@@ -33,6 +37,8 @@ const WelcomeNewUser = ({ name }) => {
   const [selectedTrim, setSelectedTrim] = useState("");
   const [selectedTransmission, setSelectedTransmission] = useState("manual");
   const [garage, setGarage] = useState([]);
+  const [nameError, setnameError] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
   const [disabled, setDisabled] = useState(false);
 
   const windowWidth = Dimensions.get("window").width;
@@ -40,25 +46,30 @@ const WelcomeNewUser = ({ name }) => {
 
   const dbRef = firebase.database().ref();
 
+  const checkUserNameAvailability = async (attemptedUsername) => {
+    await firebase
+      .database()
+      .ref()
+      .child("users")
+      .orderByChild("username")
+      .equalTo(attemptedUsername)
+      .on("value", function (snapshot) {
+        if (snapshot.exists()) {
+          return setUserNameAvailable(false);
+        } else {
+          console.log("its not taken");
+          return setUserNameAvailable(true);
+        }
+      });
+  };
+
+  // console.log(checkUserNameAvailability("username"));
+
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
   const capitalize = (s) => {
     if (typeof s !== "string") return "";
     return s.charAt(0).toUpperCase() + s.slice(1);
-  };
-
-  const checkUserNameAvailability = async () => {
-    await dbRef;
-    dbRef
-      .child("users")
-      .get()
-      .then((snapshot) => {
-        if (snapshot.exists()) {
-          Object.values(snapshot.val()).map((user) => {
-            user.usernamename;
-          });
-        }
-      });
   };
 
   const formatText = (text) => {
@@ -116,6 +127,55 @@ const WelcomeNewUser = ({ name }) => {
         key: mod.name + " " + mod.type,
       };
     });
+  };
+
+  let rootRef = firebase.database().ref();
+
+  const checkUserName = (name) => {
+    if (name.length) {
+      rootRef
+        .child("users")
+        .orderByChild("username")
+        .equalTo(name)
+        .once("value")
+        .then((snapshot) => {
+          if (snapshot.exists()) {
+            return setUserNameAvailable(false);
+          } else {
+            return setUserNameAvailable(true);
+          }
+        });
+    }
+  };
+
+  // else {
+  //   console.log("not found");
+  //   firebase
+  //     .auth()
+  //     .createUserWithEmailAndPassword(email, password)
+  //     .then(async (user) => {
+  //       console.log("Data created", user);
+  //     });
+  // }
+
+  const pageOneSubmit = async () => {
+    setUserNameAvailable(null);
+    setSubmitted(false);
+
+    checkUserName(userName);
+
+    if (userName.length && userNameAvailable === true) {
+      console.log("userNameAvailable", userNameAvailable);
+      setSelectedUserName(userName);
+      setPage(2);
+      console.log("submitted and name wasnt taken");
+    } else if (userName.length && userNameAvailable === false) {
+      setSubmitted(true);
+      console.log("submitted and name was taken");
+    } else if (!userName.length) {
+      setSubmitted(true);
+      console.log("submitted with no username");
+    }
   };
 
   const fadeIn = () => {
@@ -209,8 +269,8 @@ const WelcomeNewUser = ({ name }) => {
                 alignSelf: "center",
               }}
               placeholder="username"
-              onChangeText={(text) => setInput(text.replace(/ /g, ""))}
-              value={input}
+              onChangeText={(text) => setUserName(text.replace(/ /g, ""))}
+              value={userName}
               placeholderTextColor="#7d7d7d"
               selectionColor="#ffffff"
               theme={{
@@ -222,11 +282,12 @@ const WelcomeNewUser = ({ name }) => {
                 },
               }}
             />
+
             <Text
               style={{
                 position: "absolute",
                 bottom: 39,
-                left: 35,
+                left: 21,
                 fontSize: 15,
                 color: "#7d7d7d",
               }}
@@ -234,6 +295,16 @@ const WelcomeNewUser = ({ name }) => {
               @
             </Text>
           </View>
+          {userName.length && userNameAvailable === false ? (
+            <Text style={{ color: "red", textAlign: "center" }}>
+              username unavailable, please try a different one!
+            </Text>
+          ) : null}
+          {!userName.length & submitted ? (
+            <Text style={{ color: "red", textAlign: "center" }}>
+              please enter a username!
+            </Text>
+          ) : null}
         </Animated.ScrollView>
       )}
       {page === 2 && (
@@ -455,19 +526,25 @@ const WelcomeNewUser = ({ name }) => {
           <Text style={{ textAlign: "center", color: "#ffffff" }}>
             Your Modifications:
           </Text>
-          <FlatList
-            data={handleModList()}
-            textColor={{ color: "#ffffff" }}
-            style={{ marginTop: 20, height: windowHeight / 5 }}
-            renderItem={({ item }) => (
-              <Text
-                style={styles.item}
-                onLongPress={() => console.log("longPress")}
-              >
-                {item.key}
-              </Text>
-            )}
-          />
+          <ScrollView
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            style={{ width: "100%", height: windowHeight / 5, display: "flex" }}
+          >
+            {carModifications.map((modification) => {
+              return (
+                <ModificationCard
+                  onPress={() => {
+                    console.log("yo");
+                  }}
+                  onLongPress={() => console.log("index")}
+                  type={modification.type}
+                  name={modification.name}
+                  key={modification.name}
+                />
+              );
+            })}
+          </ScrollView>
         </Animated.ScrollView>
       )}
       {page === 4 && (
@@ -486,12 +563,17 @@ const WelcomeNewUser = ({ name }) => {
         title="Next"
         onPress={() => {
           // console.log(checkUserNameAvailability());
-          setDisabled(false);
-          fadeOut();
-          setTimeout(() => {
+          // setDisabled(false);
+          // fadeOut();
+          // setTimeout(() => {
+          //   setPage(page + 1);
+          //   fadeIn();
+          // }, 1000);
+          if (page !== 1) {
             setPage(page + 1);
-            fadeIn();
-          }, 1000);
+          } else if (page === 1) {
+            pageOneSubmit();
+          }
         }}
       />
       <Button
