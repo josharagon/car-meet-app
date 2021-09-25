@@ -38,6 +38,7 @@ const WelcomeNewUser = ({ name }) => {
   const [selectedTransmission, setSelectedTransmission] = useState("manual");
   const [garage, setGarage] = useState([]);
   const [nameError, setnameError] = useState(false);
+  const [lengthError, setLengthError] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [disabled, setDisabled] = useState(false);
 
@@ -131,51 +132,47 @@ const WelcomeNewUser = ({ name }) => {
 
   let rootRef = firebase.database().ref();
 
-  const checkUserName = (name) => {
-    if (name.length) {
-      rootRef
+  const checkUserName = async (name) => {
+    let availableUsername = userNameAvailable;
+    if (name.length > 3) {
+      await rootRef
         .child("users")
         .orderByChild("username")
         .equalTo(name)
         .once("value")
         .then((snapshot) => {
           if (snapshot.exists()) {
-            return setUserNameAvailable(false);
+            setUserNameAvailable(false);
+            availableUsername = false;
           } else {
-            return setUserNameAvailable(true);
+            setUserNameAvailable(true);
+            availableUsername = true;
           }
         });
     }
+    handleUserNameReq(name, availableUsername);
   };
 
-  // else {
-  //   console.log("not found");
-  //   firebase
-  //     .auth()
-  //     .createUserWithEmailAndPassword(email, password)
-  //     .then(async (user) => {
-  //       console.log("Data created", user);
-  //     });
-  // }
-
-  const pageOneSubmit = async () => {
-    setUserNameAvailable(null);
-    setSubmitted(false);
-
-    checkUserName(userName);
-
-    if (userName.length && userNameAvailable === true) {
-      console.log("userNameAvailable", userNameAvailable);
+  const handleUserNameReq = (name, available) => {
+    console.log(available);
+    if (name.length && available === true) {
       setSelectedUserName(userName);
-      setPage(2);
+      setPage(page + 1);
       console.log("submitted and name wasnt taken");
-    } else if (userName.length && userNameAvailable === false) {
+    } else if (name.length && available === false) {
       setSubmitted(true);
       console.log("submitted and name was taken");
-    } else if (!userName.length) {
+    } else if (!name.length) {
       setSubmitted(true);
       console.log("submitted with no username");
+    } else if (!name.length <= 3) {
+      setLengthError(true);
+      setSubmitted(true);
     }
+  };
+
+  const pageOneSubmit = () => {
+    checkUserName(userName, userNameAvailable);
   };
 
   const fadeIn = () => {
@@ -269,7 +266,12 @@ const WelcomeNewUser = ({ name }) => {
                 alignSelf: "center",
               }}
               placeholder="username"
-              onChangeText={(text) => setUserName(text.replace(/ /g, ""))}
+              onChangeText={(text) => {
+                setSubmitted(false);
+                setLengthError(false);
+                setUserNameAvailable(null);
+                setUserName(text.replace(/ /g, ""));
+              }}
               value={userName}
               placeholderTextColor="#7d7d7d"
               selectionColor="#ffffff"
@@ -300,9 +302,14 @@ const WelcomeNewUser = ({ name }) => {
               username unavailable, please try a different one!
             </Text>
           ) : null}
-          {!userName.length & submitted ? (
+          {!userName.length && submitted ? (
             <Text style={{ color: "red", textAlign: "center" }}>
               please enter a username!
+            </Text>
+          ) : null}
+          {userName.length && submitted && lengthError ? (
+            <Text style={{ color: "red", textAlign: "center" }}>
+              please enter 4 or more characters!
             </Text>
           ) : null}
         </Animated.ScrollView>
@@ -437,7 +444,17 @@ const WelcomeNewUser = ({ name }) => {
             <View style={{ alignItems: "center" }}>
               <Text style={{ color: "#ffffff" }}>Color:</Text>
               <TextInput
-                style={({ width: windowWidth / 2 - 20 }, styles.input)}
+                style={{
+                  height: 40,
+                  margin: 12,
+                  borderWidth: 1,
+                  padding: 10,
+                  backgroundColor: "#353535",
+                  height: 50,
+                  width: windowWidth / 2 - 40,
+                  fontSize: 11,
+                  alignSelf: "center",
+                }}
                 placeholder="Color"
                 onChangeText={(text) => setSelectedColor(text)}
                 value={selectedColor}
@@ -457,7 +474,17 @@ const WelcomeNewUser = ({ name }) => {
             <View style={{ alignItems: "center" }}>
               <Text style={{ color: "#ffffff" }}>Trim:</Text>
               <TextInput
-                style={styles.input}
+                style={{
+                  height: 40,
+                  margin: 12,
+                  borderWidth: 1,
+                  padding: 10,
+                  backgroundColor: "#353535",
+                  height: 50,
+                  width: windowWidth / 2 - 40,
+                  fontSize: 11,
+                  alignSelf: "center",
+                }}
                 placeholder="Trim (Optional)"
                 onChangeText={(text) => setSelectedTrim(text)}
                 value={selectedTrim}
@@ -475,7 +502,7 @@ const WelcomeNewUser = ({ name }) => {
               />
             </View>
           </View>
-          <Text style={{ color: "#ffffff" }}>Color:</Text>
+          <Text style={{ color: "#ffffff" }}>Mod:</Text>
 
           <View
             style={{
@@ -490,7 +517,16 @@ const WelcomeNewUser = ({ name }) => {
                 color: "#ffffff",
                 height: 100,
                 width: windowWidth / 2 - 20,
+                fontSize: 11,
               }}
+              style={{
+                height: windowHeight / 15,
+                transform: [
+                  { scaleX: windowWidth / 350 },
+                  { scaleY: windowWidth / 350 },
+                ],
+              }}
+              ß
               onValueChange={(itemValue, itemIndex) => {
                 setDisabled(false);
                 setSelectedMod(itemValue);
@@ -502,7 +538,17 @@ const WelcomeNewUser = ({ name }) => {
             </Picker>
 
             <TextInput
-              style={styles.input}
+              style={{
+                height: 40,
+                margin: 12,
+                borderWidth: 1,
+                padding: 10,
+                backgroundColor: "#353535",
+                height: 50,
+                width: windowWidth / 2 - 40,
+                fontSize: 9,
+                alignSelf: "center",
+              }}
               onChangeText={(text) => setBrandName(text)}
               value={brandName}
               placeholderTextColor="#7d7d7d"
@@ -524,12 +570,17 @@ const WelcomeNewUser = ({ name }) => {
             onPress={() => addMod(selectedMod, brandName)}
           />
           <Text style={{ textAlign: "center", color: "#ffffff" }}>
-            Your Modifications:
+            Mod List:
           </Text>
           <ScrollView
             horizontal={true}
             showsHorizontalScrollIndicator={false}
-            style={{ width: "100%", height: windowHeight / 5, display: "flex" }}
+            alignSelf="center"
+            style={{
+              width: windowWidth - 50,
+              height: windowHeight / 5,
+              display: "flex",
+            }}
           >
             {carModifications.map((modification) => {
               return (
@@ -569,11 +620,8 @@ const WelcomeNewUser = ({ name }) => {
           //   setPage(page + 1);
           //   fadeIn();
           // }, 1000);
-          if (page !== 1) {
-            setPage(page + 1);
-          } else if (page === 1) {
-            pageOneSubmit();
-          }
+
+          pageOneSubmit();
         }}
       />
       <Button
@@ -630,10 +678,7 @@ const modifications = [
   "Intercooler",
   "Headers",
   "Fuel System",
-  "HPFP",
-  "Meth Kit",
   "Super Charger",
-  "Pro Charger",
   "BIG WANG",
   "NOS Kit",
   "Radiator",
