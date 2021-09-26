@@ -28,7 +28,7 @@ const WelcomeNewUser = ({ name }) => {
   const [userName, setUserName] = useState("");
   const [selectedUserName, setSelectedUserName] = useState("");
   const [selectedMake, setSelectedMake] = useState("acura");
-  const [selectedModel, setSelectedModel] = useState("llx");
+  const [selectedModel, setSelectedModel] = useState("Ilx");
   const [selectedYear, setSelectedYear] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
   const [carModifications, setCarModifications] = useState([]);
@@ -81,6 +81,8 @@ const WelcomeNewUser = ({ name }) => {
       .join(" ");
   };
 
+  console.log(formatText("Cam Shaft"));
+
   const addToGarage = () => {
     const carObj = {};
     console.log(selectedYear);
@@ -90,7 +92,7 @@ const WelcomeNewUser = ({ name }) => {
       carObj.year = selectedYear;
       garage.push(carObj);
       setSelectedMake("acura");
-      setSelectedModel("llx");
+      setSelectedModel("Ilx");
       setSelectedYear("");
       setDisabled(true);
     } else {
@@ -169,6 +171,12 @@ const WelcomeNewUser = ({ name }) => {
       setLengthError(true);
       setSubmitted(true);
     }
+  };
+
+  const resetErrors = () => {
+    setSubmitted(false);
+    setLengthError(false);
+    setUserNameAvailable(null);
   };
 
   const pageOneSubmit = () => {
@@ -267,9 +275,7 @@ const WelcomeNewUser = ({ name }) => {
               }}
               placeholder="username"
               onChangeText={(text) => {
-                setSubmitted(false);
-                setLengthError(false);
-                setUserNameAvailable(null);
+                resetErrors();
                 setUserName(text.replace(/ /g, ""));
               }}
               value={userName}
@@ -589,7 +595,7 @@ const WelcomeNewUser = ({ name }) => {
                     console.log("yo");
                   }}
                   onLongPress={() => console.log("index")}
-                  type={modification.type}
+                  type={modification.type.replace(/ /g, "")}
                   name={modification.name}
                   key={modification.name}
                 />
@@ -679,8 +685,8 @@ const modifications = [
   "Headers",
   "Fuel System",
   "Super Charger",
-  "BIG WANG",
-  "NOS Kit",
+  "Big Wang",
+  "NOS",
   "Radiator",
   "Short Shifter",
   "Oil Cooler",
@@ -838,8 +844,8 @@ const carModels = {
       "f-450-super-duty",
       "fiesta",
       "flex",
-      "focus-rs",
-      "focus-st",
+      "focus-rS",
+      "focus-sT",
       "fusion",
       "fusion-energi",
       "fusion-hybrid",

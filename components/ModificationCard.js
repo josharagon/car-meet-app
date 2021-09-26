@@ -17,6 +17,7 @@ const ModificationCard = ({ type, name }) => {
   let itemUrl = `../assets/images/${type}.png`;
   const allParts = {
     Turbo: { url: require("../assets/images/turbo.png") },
+    SuperCharger: { url: require("../assets/images/supercharger.png") },
     Intake: { url: require("../assets/images/intake.png") },
     Exhaust: { url: require("../assets/images/exhaust.png") },
     Tires: { url: require("../assets/images/tires.png") },
@@ -24,6 +25,19 @@ const ModificationCard = ({ type, name }) => {
     Intercooler: { url: require("../assets/images/intercooler.png") },
     Suspension: { url: require("../assets/images/suspension.png") },
     Downpipe: { url: require("../assets/images/downpipe.png") },
+    BigWang: { url: require("../assets/images/bigwang.png") },
+    Manifold: { url: require("../assets/images/manifold.png") },
+    NOS: { url: require("../assets/images/nos.png") },
+    OilCooler: { url: require("../assets/images/oilcooler.png") },
+    Pistons: { url: require("../assets/images/pistons.png") },
+    Radiator: { url: require("../assets/images/radiator.png") },
+    Transmission: { url: require("../assets/images/transmission.png") },
+    Clutch: { url: require("../assets/images/clutch.png") },
+    FuelSystem: { url: require("../assets/images/fuelsystem.png") },
+    ShortShifter: { url: require("../assets/images/shortshifter.png") },
+    Camshaft: { url: require("../assets/images/camshaft.png") },
+    Rods: { url: require("../assets/images/rods.png") },
+    BrakeKit: { url: require("../assets/images/brakekit.png") },
   };
 
   return (
@@ -52,7 +66,9 @@ const ModificationCard = ({ type, name }) => {
         }}
       />
       <Text style={{ color: "white", textAlign: "center" }}>{`${name}`}</Text>
-      <Text style={{ color: "white", textAlign: "center" }}>{`${type}`}</Text>
+      <Text
+        style={{ color: "white", textAlign: "center", fontSize: 8 }}
+      >{`${type.match(/[A-Z][a-z]+|[0-9]+/g).join(" ")}`}</Text>
     </View>
   );
 };
