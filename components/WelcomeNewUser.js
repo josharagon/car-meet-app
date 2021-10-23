@@ -247,17 +247,28 @@ const WelcomeNewUser = ({ name }) => {
             lineHeight: 80,
             opacity: fadeAnim,
           }}
-          justifyContent="center"
           alignItems="center"
         >
           <Text
             style={{
               color: "#ffffff",
-              fontSize: 38,
+              fontSize: 26,
               marginBottom: 10,
+              textAlign: "center",
             }}
           >
-            choose your username:
+            Create Username
+          </Text>
+          <Text
+            style={{
+              color: "#ffffff",
+              fontSize: 15,
+              marginBottom: 10,
+              textAlign: "center",
+            }}
+          >
+            Pick a username for your new account. You can always change it
+            later.
           </Text>
           <View style={{ position: "relative" }}>
             <TextInput
@@ -302,6 +313,27 @@ const WelcomeNewUser = ({ name }) => {
             >
               @
             </Text>
+            <View
+              style={{
+                position: "absolute",
+                bottom: 39,
+                right: 25,
+                zIndex: 1,
+              }}
+            >
+              <Icon
+                name="close-circle-outline"
+                type="ionicon"
+                color="white"
+                size={18}
+                onPress={() => {
+                  setUserName("");
+                  setUserNameAvailable(null);
+                  setSubmitted(false);
+                  setLengthError(false);
+                }}
+              />
+            </View>
           </View>
           {userName.length && userNameAvailable === false ? (
             <Text style={{ color: "red", textAlign: "center" }}>
