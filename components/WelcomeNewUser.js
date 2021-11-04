@@ -3,14 +3,15 @@ import {
   StyleSheet,
   Text,
   View,
-  Button,
   SafeAreaView,
   ScrollView,
   Dimensions,
   Animated,
   FlatList,
+  Pressable,
   Alert,
 } from "react-native";
+import Button from "react-native-flat-button";
 
 import ModificationCard from "./ModificationCard";
 
@@ -21,6 +22,7 @@ import SettingTab from "./SettingTab";
 import { Input } from "react-native-elements/dist/input/Input";
 import { TextInput } from "react-native-paper";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+import SimpleImagePicker from "./PhotoPicker";
 
 const WelcomeNewUser = ({ name }) => {
   const [page, setPage] = useState(1);
@@ -37,10 +39,15 @@ const WelcomeNewUser = ({ name }) => {
   const [selectedTrim, setSelectedTrim] = useState("");
   const [selectedTransmission, setSelectedTransmission] = useState("manual");
   const [garage, setGarage] = useState([]);
+  const [yearError, setYearError] = useState(false);
+  const [invalidYear, setInvalidYear] = useState(false);
+  const [garageError, setGarageError] = useState(false);
   const [nameError, setnameError] = useState(false);
   const [lengthError, setLengthError] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [disabled, setDisabled] = useState(false);
+  const [n, setN] = useState(0);
+  const [power, setPower] = useState({ hp: "", torque: "" });
 
   const windowWidth = Dimensions.get("window").width;
   const windowHeight = Dimensions.get("window").height;
@@ -85,8 +92,10 @@ const WelcomeNewUser = ({ name }) => {
 
   const addToGarage = () => {
     const carObj = {};
-    console.log(selectedYear);
-    if (selectedMake && selectedModel && selectedYear) {
+    if (selectedMake && selectedModel && selectedYear.length === 4) {
+      setGarageError(false);
+      setYearError(false);
+      setInvalidYear(false);
       carObj.make = selectedMake;
       carObj.model = selectedModel;
       carObj.year = selectedYear;
@@ -95,8 +104,12 @@ const WelcomeNewUser = ({ name }) => {
       setSelectedModel("Ilx");
       setSelectedYear("");
       setDisabled(true);
-    } else {
-      return;
+    } else if (selectedYear && selectedYear.length < 4) {
+      setInvalidYear(true);
+      setYearError(true);
+    } else if (!selectedYear) {
+      setInvalidYear(false);
+      setYearError(true);
     }
   };
 
@@ -130,6 +143,12 @@ const WelcomeNewUser = ({ name }) => {
         key: mod.name + " " + mod.type,
       };
     });
+  };
+
+  const handleAdditionalCarInfo = (garageIndex) => {
+    const car = garage[garageIndex];
+    car.color = selectedColor;
+    selectedTrim ? (car.trim = selectedTrim) : null;
   };
 
   let rootRef = firebase.database().ref();
@@ -183,11 +202,20 @@ const WelcomeNewUser = ({ name }) => {
     checkUserName(userName, userNameAvailable);
   };
 
+  const pageTwoSubmit = () => {
+    if (garage.length > 0 && yearError === false) {
+      setPage(page + 1);
+    } else if (garage.length === 0) {
+      setGarageError(true);
+    }
+  };
+
   const fadeIn = () => {
     // Will change fadeAnim value to 1 in 5 seconds
     Animated.timing(fadeAnim, {
       toValue: 1,
       duration: 2000,
+      useNativeDriver: true,
     }).start();
   };
 
@@ -196,6 +224,7 @@ const WelcomeNewUser = ({ name }) => {
     Animated.timing(fadeAnim, {
       toValue: 0,
       duration: 1000,
+      useNativeDriver: true,
     }).start();
   };
 
@@ -209,7 +238,8 @@ const WelcomeNewUser = ({ name }) => {
         backgroundColor: "#202020",
         height: "100%",
         display: "flex",
-        justifyContent: "center",
+        paddingTop: windowHeight * 0.11,
+        paddingBottom: windowHeight * 0.05,
       }}
     >
       <SafeAreaView />
@@ -261,7 +291,7 @@ const WelcomeNewUser = ({ name }) => {
           </Text>
           <Text
             style={{
-              color: "#ffffff",
+              color: "#9d9d9d",
               fontSize: 15,
               marginBottom: 10,
               textAlign: "center",
@@ -284,10 +314,10 @@ const WelcomeNewUser = ({ name }) => {
                 fontSize: 12,
                 alignSelf: "center",
               }}
-              placeholder="username"
+              placeholder="Username"
               onChangeText={(text) => {
                 resetErrors();
-                setUserName(text.replace(/ /g, ""));
+                setUserName(text.replace(/ /g, "").toLowerCase());
               }}
               value={userName}
               placeholderTextColor="#7d7d7d"
@@ -317,7 +347,7 @@ const WelcomeNewUser = ({ name }) => {
               style={{
                 position: "absolute",
                 bottom: 39,
-                right: 25,
+                right: 20,
                 zIndex: 1,
               }}
             >
@@ -350,6 +380,23 @@ const WelcomeNewUser = ({ name }) => {
               please enter 4 or more characters!
             </Text>
           ) : null}
+
+          <Button
+            type="custom"
+            containerStyle={{
+              backgroundColor: "#2C95F6",
+              width: windowWidth - 50,
+              height: 50,
+              marginVertical: 10,
+              alignSelf: "center",
+              borderRadius: 1,
+            }}
+            onPress={() => {
+              pageOneSubmit();
+            }}
+          >
+            Next
+          </Button>
         </Animated.ScrollView>
       )}
       {page === 2 && (
@@ -357,13 +404,13 @@ const WelcomeNewUser = ({ name }) => {
           keyboardShouldPersistTaps="handled"
           scrollEnabled={false}
           style={(styles.carPage, { opacity: fadeAnim })}
-          justifyContent="center"
         >
           <Text
             style={{
               color: "#ffffff",
-              fontSize: 40,
-              lineHeight: 40,
+              fontSize: 26,
+              marginBottom: 10,
+              textAlign: "center",
             }}
           >
             What's in your garage?
@@ -373,7 +420,10 @@ const WelcomeNewUser = ({ name }) => {
             <TextInput
               style={styles.input}
               placeholder="Year"
-              onChangeText={(text) => setSelectedYear(text)}
+              onChangeText={(text) => {
+                setYearError(false);
+                setSelectedYear(text);
+              }}
               value={selectedYear}
               placeholderTextColor="#7d7d7d"
               selectionColor="#ffffff"
@@ -390,6 +440,16 @@ const WelcomeNewUser = ({ name }) => {
               }}
             />
           </View>
+          {yearError ? (
+            <Text style={{ color: "red", textAlign: "center" }}>
+              please enter a year!
+            </Text>
+          ) : null}
+          {invalidYear ? (
+            <Text style={{ color: "red", textAlign: "center" }}>
+              please enter add a valid year! (ex. 2020)
+            </Text>
+          ) : null}
           <View
             style={{
               display: "flex",
@@ -410,6 +470,7 @@ const WelcomeNewUser = ({ name }) => {
               onValueChange={(itemValue, itemIndex) => {
                 setDisabled(false);
                 setSelectedMake(itemValue);
+                setSelectedModel(carModels[itemValue].models[0]);
               }}
             >
               {Object.keys(carModels).map((item) => (
@@ -435,11 +496,23 @@ const WelcomeNewUser = ({ name }) => {
               ))}
             </Picker>
           </View>
-          <Button
-            title="Add to Garage"
-            disabled={disabled}
-            onPress={() => addToGarage()}
-          />
+          <Pressable disabled={true} style={{ opacity: disabled ? 0.5 : 1 }}>
+            <Button
+              type="custom"
+              containerStyle={{
+                backgroundColor: "#2C95F6",
+                width: windowWidth - 50,
+                height: 50,
+                marginVertical: 15,
+                alignSelf: "center",
+                borderRadius: 1,
+              }}
+              disabled={disabled}
+              onPress={() => addToGarage()}
+            >
+              Add to Garage
+            </Button>
+          </Pressable>
           <Text style={{ textAlign: "center", color: "#ffffff" }}>
             Your Garage:
           </Text>
@@ -456,25 +529,76 @@ const WelcomeNewUser = ({ name }) => {
               </Text>
             )}
           />
+          {garageError ? (
+            <Text style={{ color: "red", textAlign: "center" }}>
+              please add a car to your garage!
+            </Text>
+          ) : null}
+          <Button
+            type="custom"
+            containerStyle={{
+              backgroundColor: "#2C95F6",
+              width: windowWidth - 50,
+              height: 50,
+              alignSelf: "center",
+              borderRadius: 1,
+            }}
+            onPress={() => pageTwoSubmit()}
+          >
+            Next
+          </Button>
         </Animated.ScrollView>
       )}
       {page === 3 && (
         <Animated.ScrollView
           opacity={fadeAnim}
           keyboardShouldPersistTaps="handled"
-          scrollEnabled={false}
-          justifyContent="center"
+          // scrollEnabled={false}
           alignSelf="center"
           alignItems="center"
         >
-          <Text style={{ color: "#ffffff", fontSize: 30, marginBottom: 35 }}>
-            Tell Us More About your {formatText(garage[0].model)}
+          {/* <View
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "flex-end",
+              marginBottom: 5,
+            }}
+          >
+            {garage.length - 1 > n && (
+              <Icon
+                name="arrow-right"
+                type="material-community"
+                color="white"
+                size={30}
+                onPress={() => setN(n + 1)}
+              ></Icon>
+            )}
+
+            {n === garage.length - 1 && (
+              <Icon
+                name="check"
+                type="material-community"
+                color="white"
+                size={30}
+                onPress={() => setPage(4)}
+              ></Icon>
+            )}
+          </View> */}
+          <Text
+            style={{
+              color: "#ffffff",
+              fontSize: 24,
+              marginBottom: 20,
+              textAlign: "center",
+            }}
+          >
+            Tell Us More About your {"\n"} {formatText(garage[n].model)}
           </Text>
 
           <View
             style={{
               display: "flex",
-              flexDirection: "row",
               justifyContent: "center",
               alignSelf: "center",
             }}
@@ -489,7 +613,7 @@ const WelcomeNewUser = ({ name }) => {
                   padding: 10,
                   backgroundColor: "#353535",
                   height: 50,
-                  width: windowWidth / 2 - 40,
+                  width: windowWidth - 120,
                   fontSize: 11,
                   alignSelf: "center",
                 }}
@@ -519,7 +643,7 @@ const WelcomeNewUser = ({ name }) => {
                   padding: 10,
                   backgroundColor: "#353535",
                   height: 50,
-                  width: windowWidth / 2 - 40,
+                  width: windowWidth - 120,
                   fontSize: 11,
                   alignSelf: "center",
                 }}
@@ -539,16 +663,75 @@ const WelcomeNewUser = ({ name }) => {
                 }}
               />
             </View>
-          </View>
-          <Text style={{ color: "#ffffff" }}>Mod:</Text>
 
-          <View
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-            }}
-          >
+            <Text style={{ color: "#ffffff", textAlign: "center" }}>
+              Power:
+            </Text>
+
+            <View style={{ display: "flex", flexDirection: "row" }}>
+              <TextInput
+                style={{
+                  height: 40,
+                  margin: 12,
+                  borderWidth: 1,
+                  padding: 10,
+                  backgroundColor: "#353535",
+                  height: 50,
+                  width: (windowWidth - 120) / 2,
+                  fontSize: 11,
+                  alignSelf: "center",
+                }}
+                keyboardType="numeric"
+                placeholder="Horsepower"
+                onChangeText={(text) => setPower({ ...power, hp: text })}
+                value={power.hp}
+                placeholderTextColor="#7d7d7d"
+                selectionColor="#ffffff"
+                maxLength={4}
+                theme={{
+                  colors: {
+                    placeholder: "white",
+                    text: "white",
+                    primary: "white",
+                    underlineColor: "transparent",
+                  },
+                }}
+              />
+
+              <TextInput
+                style={{
+                  height: 40,
+                  margin: 12,
+                  borderWidth: 1,
+                  padding: 10,
+                  backgroundColor: "#353535",
+                  height: 50,
+                  width: (windowWidth - 120) / 2,
+                  fontSize: 11,
+                  alignSelf: "center",
+                }}
+                keyboardType="numeric"
+                placeholder="Torque"
+                onChangeText={(text) => setPower({ ...power, torque: text })}
+                value={power.torque}
+                placeholderTextColor="#7d7d7d"
+                selectionColor="#ffffff"
+                maxLength={4}
+                theme={{
+                  colors: {
+                    placeholder: "white",
+                    text: "white",
+                    primary: "white",
+                    underlineColor: "transparent",
+                  },
+                }}
+              />
+            </View>
+
+            <Text style={{ color: "#ffffff", textAlign: "center" }}>
+              Modifications:
+            </Text>
+
             <Picker
               selectedValue={selectedMod}
               itemStyle={{
@@ -556,6 +739,7 @@ const WelcomeNewUser = ({ name }) => {
                 height: 100,
                 width: windowWidth / 2 - 20,
                 fontSize: 11,
+                alignSelf: "center",
               }}
               style={{
                 height: windowHeight / 15,
@@ -578,12 +762,12 @@ const WelcomeNewUser = ({ name }) => {
             <TextInput
               style={{
                 height: 40,
-                margin: 12,
+                marginTop: 40,
                 borderWidth: 1,
                 padding: 10,
                 backgroundColor: "#353535",
                 height: 50,
-                width: windowWidth / 2 - 40,
+                width: windowWidth - 120,
                 fontSize: 9,
                 alignSelf: "center",
               }}
@@ -603,14 +787,24 @@ const WelcomeNewUser = ({ name }) => {
             />
           </View>
           <Button
-            title="Add to Mod List"
-            disabled={disabled}
+            type="custom"
+            containerStyle={{
+              backgroundColor: "#2C95F6",
+              width: windowWidth - 120,
+              height: 50,
+              marginVertical: 15,
+              alignSelf: "center",
+              borderRadius: 1,
+            }}
             onPress={() => addMod(selectedMod, brandName)}
-          />
+          >
+            Add to Mod List
+          </Button>
           <Text style={{ textAlign: "center", color: "#ffffff" }}>
             Mod List:
           </Text>
           <ScrollView
+            verticle={false}
             horizontal={true}
             showsHorizontalScrollIndicator={false}
             alignSelf="center"
@@ -634,6 +828,8 @@ const WelcomeNewUser = ({ name }) => {
               );
             })}
           </ScrollView>
+
+          <SimpleImagePicker />
         </Animated.ScrollView>
       )}
       {page === 4 && (
@@ -648,31 +844,6 @@ const WelcomeNewUser = ({ name }) => {
           5
         </Animated.Text>
       )}
-      <Button
-        title="Next"
-        onPress={() => {
-          // console.log(checkUserNameAvailability());
-          // setDisabled(false);
-          // fadeOut();
-          // setTimeout(() => {
-          //   setPage(page + 1);
-          //   fadeIn();
-          // }, 1000);
-
-          pageOneSubmit();
-        }}
-      />
-      <Button
-        title="Back"
-        onPress={() => {
-          setDisabled(false);
-          fadeOut();
-          setTimeout(() => {
-            setPage(page - 1);
-            fadeIn();
-          }, 1000);
-        }}
-      />
     </View>
   );
 };
