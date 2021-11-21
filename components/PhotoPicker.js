@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Button, Image, View, Platform } from "react-native";
+import { Button, Text, Image, View, Platform } from "react-native";
 import * as ImagePicker from "expo-image-picker";
+import { Icon } from "react-native-elements";
+import AddImageContainer from "./AddImageContainer";
+import UploadedImage from "./UploadedImage";
 
 export default function SimpleImagePicker() {
   const [image, setImage] = useState(null);
+  const [images, setImages] = useState([]);
 
   useEffect(() => {
     (async () => {
@@ -17,27 +21,48 @@ export default function SimpleImagePicker() {
     })();
   }, []);
 
+  const returnImageGallery = () => {
+    if (images.length > 0) {
+      console.log(images);
+    }
+  };
+
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
+      allowsMultipleSelection: true,
     });
-
-    console.log(result);
 
     if (!result.cancelled) {
       setImage(result.uri);
+      setImages((images) => [...images, result.uri]);
+      setImage(null);
     }
   };
 
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <Button title="Pick an image from camera roll" onPress={pickImage} />
-      {image && (
-        <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />
-      )}
+      <Icon
+        name="add-a-photo"
+        type="material"
+        color="white"
+        size={18}
+        onPress={pickImage}
+      />
+
+      {images.length === 0 && <AddImageContainer />}
+      {images.length > 0 &&
+        images.map((image, index) => (
+          <UploadedImage
+            image={image}
+            images={images}
+            setImages={setImages}
+            index={index}
+          />
+        ))}
     </View>
   );
 }
