@@ -4,6 +4,7 @@ import * as ImagePicker from "expo-image-picker";
 import { Icon } from "react-native-elements";
 import AddImageContainer from "./AddImageContainer";
 import UploadedImage from "./UploadedImage";
+import { ScrollView } from "react-native-gesture-handler";
 
 export default function SimpleImagePicker() {
   const [image, setImage] = useState(null);
@@ -44,7 +45,7 @@ export default function SimpleImagePicker() {
   };
 
   return (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+    <View style={{ flex: 1, alignItems: "center" }}>
       <Icon
         name="add-a-photo"
         type="material"
@@ -52,17 +53,25 @@ export default function SimpleImagePicker() {
         size={18}
         onPress={pickImage}
       />
-
       {images.length === 0 && <AddImageContainer />}
-      {images.length > 0 &&
-        images.map((image, index) => (
-          <UploadedImage
-            image={image}
-            images={images}
-            setImages={setImages}
-            index={index}
-          />
-        ))}
+
+      <ScrollView
+        horizontal={true}
+        style={{ flex: 1 }}
+        contentContainerStyle={{
+          flexGrow: 1,
+        }}
+      >
+        {images.length > 0 &&
+          images.map((image, index) => (
+            <UploadedImage
+              image={image}
+              images={images}
+              setImages={setImages}
+              index={index}
+            />
+          ))}
+      </ScrollView>
     </View>
   );
 }

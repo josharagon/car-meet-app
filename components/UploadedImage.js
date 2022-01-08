@@ -7,10 +7,9 @@ const UploadedImage = ({ image, setImages, images, index }) => {
     <View
       style={{
         position: "relative",
-        height: "100%",
-        width: "100%",
         justifyContent: "center",
         alignItems: "center",
+        margin: 15,
       }}
     >
       <Image
@@ -18,18 +17,16 @@ const UploadedImage = ({ image, setImages, images, index }) => {
         style={{
           width: 200,
           height: 200,
-          left: 0,
-          top: 0,
         }}
       ></Image>
-      <View style={{ position: "absolute", top: 5, right: 85 }}>
+      <View style={{ position: "absolute", top: 5, right: 10 }}>
         <Icon
           name="close-circle-outline"
           type="ionicon"
           color="white"
           size={25}
           onPress={() => {
-            console.log(index);
+            setImages(images.filter((_, i) => i !== index));
           }}
         />
       </View>

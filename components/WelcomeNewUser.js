@@ -33,6 +33,7 @@ const WelcomeNewUser = ({ name }) => {
   const [selectedModel, setSelectedModel] = useState("Ilx");
   const [selectedYear, setSelectedYear] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
+  const [colorError, setColorError] = useState(false);
   const [carModifications, setCarModifications] = useState([]);
   const [selectedMod, setSelectedMod] = useState("Downpipe");
   const [brandName, setBrandName] = useState("");
@@ -48,6 +49,7 @@ const WelcomeNewUser = ({ name }) => {
   const [disabled, setDisabled] = useState(false);
   const [n, setN] = useState(0);
   const [power, setPower] = useState({ hp: "", torque: "" });
+  const [powerError, setPowerError] = useState(false);
 
   const windowWidth = Dimensions.get("window").width;
   const windowHeight = Dimensions.get("window").height;
@@ -87,8 +89,6 @@ const WelcomeNewUser = ({ name }) => {
       .map((word) => capitalize(word))
       .join(" ");
   };
-
-  console.log(formatText("Cam Shaft"));
 
   const addToGarage = () => {
     const carObj = {};
@@ -210,6 +210,22 @@ const WelcomeNewUser = ({ name }) => {
     }
   };
 
+  const pageThreeSubmit = () => {
+    if (power.hp && power.torque && selectedColor) {
+      setPage(page + 1);
+    } else if (
+      power.hp === "" ||
+      (power.torque === "" && selectedColor === "")
+    ) {
+      setPowerError(true);
+      setColorError(true);
+    } else if (power.hp === "" || power.torque === "") {
+      setPowerError(true);
+    } else if (selectedColor === "") {
+      setColorError(true);
+    }
+  };
+
   const fadeIn = () => {
     // Will change fadeAnim value to 1 in 5 seconds
     Animated.timing(fadeAnim, {
@@ -307,7 +323,7 @@ const WelcomeNewUser = ({ name }) => {
                 margin: 12,
                 borderWidth: 1,
                 padding: 10,
-                paddingLeft: 13,
+                paddingLeft: "8%",
                 backgroundColor: "#353535",
                 height: 50,
                 width: windowWidth - 50,
@@ -336,7 +352,7 @@ const WelcomeNewUser = ({ name }) => {
               style={{
                 position: "absolute",
                 bottom: 39,
-                left: 21,
+                left: "10%",
                 fontSize: 15,
                 color: "#7d7d7d",
               }}
@@ -347,7 +363,7 @@ const WelcomeNewUser = ({ name }) => {
               style={{
                 position: "absolute",
                 bottom: 39,
-                right: 20,
+                right: "9%",
                 zIndex: 1,
               }}
             >
@@ -556,6 +572,11 @@ const WelcomeNewUser = ({ name }) => {
           // scrollEnabled={false}
           alignSelf="center"
           alignItems="center"
+          style={{
+            width: windowWidth - 50,
+            height: windowHeight - 50,
+            overflow: "hidden",
+          }}
         >
           {/* <View
             style={{
@@ -618,11 +639,13 @@ const WelcomeNewUser = ({ name }) => {
                   alignSelf: "center",
                 }}
                 placeholder="Color"
-                onChangeText={(text) => setSelectedColor(text)}
+                onChangeText={(text) => {
+                  setColorError(false);
+                  setSelectedColor(text);
+                }}
                 value={selectedColor}
                 placeholderTextColor="#7d7d7d"
                 selectionColor="#ffffff"
-                maxLength={4}
                 theme={{
                   colors: {
                     placeholder: "white",
@@ -652,7 +675,6 @@ const WelcomeNewUser = ({ name }) => {
                 value={selectedTrim}
                 placeholderTextColor="#7d7d7d"
                 selectionColor="#ffffff"
-                maxLength={4}
                 theme={{
                   colors: {
                     placeholder: "white",
@@ -680,10 +702,14 @@ const WelcomeNewUser = ({ name }) => {
                   width: (windowWidth - 120) / 2,
                   fontSize: 11,
                   alignSelf: "center",
+                  borderColor: "red",
                 }}
                 keyboardType="numeric"
                 placeholder="Horsepower"
-                onChangeText={(text) => setPower({ ...power, hp: text })}
+                onChangeText={(text) => {
+                  setPowerError(false);
+                  setPower({ ...power, hp: text });
+                }}
                 value={power.hp}
                 placeholderTextColor="#7d7d7d"
                 selectionColor="#ffffff"
@@ -712,7 +738,10 @@ const WelcomeNewUser = ({ name }) => {
                 }}
                 keyboardType="numeric"
                 placeholder="Torque"
-                onChangeText={(text) => setPower({ ...power, torque: text })}
+                onChangeText={(text) => {
+                  setPowerError(false);
+                  setPower({ ...power, torque: text });
+                }}
                 value={power.torque}
                 placeholderTextColor="#7d7d7d"
                 selectionColor="#ffffff"
@@ -812,6 +841,7 @@ const WelcomeNewUser = ({ name }) => {
               width: windowWidth - 50,
               height: windowHeight / 5,
               display: "flex",
+              marginBottom: 100,
             }}
           >
             {carModifications.map((modification) => {
@@ -829,7 +859,39 @@ const WelcomeNewUser = ({ name }) => {
             })}
           </ScrollView>
 
+          <Text
+            style={{ textAlign: "center", color: "#ffffff", marginBottom: 9 }}
+          >
+            Upload Images:
+          </Text>
           <SimpleImagePicker />
+          {colorError && (
+            <Text
+              style={{ textAlign: "center", color: "red", marginBottom: 8 }}
+            >
+              Please enter the color of your {garage[n].model}
+            </Text>
+          )}
+          {powerError && (
+            <Text
+              style={{ textAlign: "center", color: "red", marginBottom: 8 }}
+            >
+              Please enter the power (HP and TQ) of your {garage[n].model}
+            </Text>
+          )}
+          <Button
+            type="custom"
+            containerStyle={{
+              backgroundColor: "#2C95F6",
+              width: windowWidth - 50,
+              height: 50,
+              alignSelf: "center",
+              borderRadius: 1,
+            }}
+            onPress={() => pageThreeSubmit()}
+          >
+            Next
+          </Button>
         </Animated.ScrollView>
       )}
       {page === 4 && (
