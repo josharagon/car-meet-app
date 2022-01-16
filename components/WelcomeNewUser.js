@@ -55,6 +55,7 @@ const WelcomeNewUser = ({ name }) => {
   const windowHeight = Dimensions.get("window").height;
 
   const dbRef = firebase.database().ref();
+  const scrollRef = useRef();
 
   const checkUserNameAvailability = async (attemptedUsername) => {
     await firebase
@@ -212,7 +213,13 @@ const WelcomeNewUser = ({ name }) => {
 
   const pageThreeSubmit = () => {
     if (power.hp && power.torque && selectedColor) {
-      setPage(page + 1);
+      if (garage.length - 1 === n) {
+        setPage(page + 1);
+      } else {
+        setN(n + 1);
+        reloadCarDetails();
+        resetCarDetails();
+      }
     } else if (
       power.hp === "" ||
       (power.torque === "" && selectedColor === "")
@@ -242,6 +249,20 @@ const WelcomeNewUser = ({ name }) => {
       duration: 1000,
       useNativeDriver: true,
     }).start();
+  };
+
+  const reloadCarDetails = () => {
+    scrollRef.current?.scrollTo({
+      y: 0,
+      animated: true,
+    });
+  };
+
+  const resetCarDetails = () => {
+    setSelectedColor("");
+    setSelectedTrim("");
+    setPower({ hp: "", torque: "" });
+    setCarModifications([]);
   };
 
   useEffect(() => {
@@ -567,6 +588,7 @@ const WelcomeNewUser = ({ name }) => {
       )}
       {page === 3 && (
         <Animated.ScrollView
+          ref={scrollRef}
           opacity={fadeAnim}
           keyboardShouldPersistTaps="handled"
           // scrollEnabled={false}
@@ -614,7 +636,8 @@ const WelcomeNewUser = ({ name }) => {
               textAlign: "center",
             }}
           >
-            Tell Us More About your {"\n"} {formatText(garage[n].model)}
+            Tell Us More About your {"\n"} {formatText(garage[n].make)}{" "}
+            {formatText(garage[n].model)}
           </Text>
 
           <View
