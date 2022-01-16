@@ -416,9 +416,8 @@ const WelcomeNewUser = ({ name }) => {
         </Animated.ScrollView>
       )}
       {page === 2 && (
-        <Animated.ScrollView
+        <Animated.View
           keyboardShouldPersistTaps="handled"
-          scrollEnabled={false}
           style={(styles.carPage, { opacity: fadeAnim })}
         >
           <Text
@@ -535,6 +534,7 @@ const WelcomeNewUser = ({ name }) => {
           <FlatList
             data={handleGarageList()}
             textColor={{ color: "#ffffff" }}
+            scrollEnabled={false}
             style={{ marginTop: 20, height: windowHeight / 5 }}
             renderItem={({ item }) => (
               <Text
@@ -563,7 +563,7 @@ const WelcomeNewUser = ({ name }) => {
           >
             Next
           </Button>
-        </Animated.ScrollView>
+        </Animated.View>
       )}
       {page === 3 && (
         <Animated.ScrollView
@@ -637,6 +637,7 @@ const WelcomeNewUser = ({ name }) => {
                   width: windowWidth - 120,
                   fontSize: 11,
                   alignSelf: "center",
+                  borderColor: colorError ? "red" : null,
                 }}
                 placeholder="Color"
                 onChangeText={(text) => {
@@ -702,7 +703,7 @@ const WelcomeNewUser = ({ name }) => {
                   width: (windowWidth - 120) / 2,
                   fontSize: 11,
                   alignSelf: "center",
-                  borderColor: "red",
+                  borderColor: powerError ? "red" : null,
                 }}
                 keyboardType="numeric"
                 placeholder="Horsepower"
@@ -735,6 +736,7 @@ const WelcomeNewUser = ({ name }) => {
                   width: (windowWidth - 120) / 2,
                   fontSize: 11,
                   alignSelf: "center",
+                  borderColor: powerError ? "red" : null,
                 }}
                 keyboardType="numeric"
                 placeholder="Torque"
@@ -903,7 +905,13 @@ const WelcomeNewUser = ({ name }) => {
             opacity: fadeAnim,
           }}
         >
-          5
+          <Button
+            onPress={() => {
+              setPage(page - 1);
+            }}
+          >
+            back
+          </Button>
         </Animated.Text>
       )}
     </View>

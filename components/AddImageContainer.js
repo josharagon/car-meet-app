@@ -25,7 +25,7 @@ const AddImageContainer = () => {
         {" "}
         Add up to 10 photos
       </Text>
-      <Text style={{ color: "#fff", fontSize: "10%" }}>
+      <Text style={{ color: "#fff", fontSize: windowWidth * 0.025 }}>
         tip: double tap to remove photos
       </Text>
     </View>
