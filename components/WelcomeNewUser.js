@@ -23,6 +23,7 @@ import { Input } from "react-native-elements/dist/input/Input";
 import { TextInput } from "react-native-paper";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import SimpleImagePicker from "./PhotoPicker";
+import UserProfile from "./UserProfile";
 
 const WelcomeNewUser = ({ name }) => {
   const [page, setPage] = useState(1);
@@ -35,6 +36,7 @@ const WelcomeNewUser = ({ name }) => {
   const [selectedColor, setSelectedColor] = useState("");
   const [colorError, setColorError] = useState(false);
   const [carModifications, setCarModifications] = useState([]);
+  const [uploadedImages, setUploadedImages] = useState([]);
   const [selectedMod, setSelectedMod] = useState("Downpipe");
   const [brandName, setBrandName] = useState("");
   const [selectedTrim, setSelectedTrim] = useState("");
@@ -274,7 +276,7 @@ const WelcomeNewUser = ({ name }) => {
     car["trim"] = selectedTrim;
     car["power"] = power;
     car["modifications"] = carModifications;
-    // car['images'] = images;
+    car["images"] = uploadedImages;
   };
 
   useEffect(() => {
@@ -901,7 +903,10 @@ const WelcomeNewUser = ({ name }) => {
           >
             Upload Images:
           </Text>
-          <SimpleImagePicker />
+          <SimpleImagePicker
+            uploadedImages={uploadedImages}
+            setUploadedImages={setUploadedImages}
+          />
           {colorError && (
             <Text
               style={{ textAlign: "center", color: "red", marginBottom: 8 }}
@@ -932,7 +937,7 @@ const WelcomeNewUser = ({ name }) => {
         </Animated.ScrollView>
       )}
       {page === 4 && (
-        <Animated.Text
+        <Animated.View
           style={{
             color: "#ffffff",
             fontSize: 66,
@@ -947,7 +952,8 @@ const WelcomeNewUser = ({ name }) => {
           >
             back
           </Button>
-        </Animated.Text>
+          <UserProfile navigation={null} garageArr={garage} />
+        </Animated.View>
       )}
     </View>
   );

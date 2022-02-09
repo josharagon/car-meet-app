@@ -25,6 +25,8 @@ const UserProfile = ({ navigation, garageArr }) => {
   const windowWidth = Dimensions.get("window").width;
   const windowHeight = Dimensions.get("window").height;
 
+  console.log(garage.length);
+
   const logOut = () => {
     firebase.auth().signOut();
   };
@@ -56,18 +58,21 @@ const UserProfile = ({ navigation, garageArr }) => {
             source={require("../assets/images/verified.png")}
             style={{ height: 20, width: 20, position: "absolute", left: 160 }}
           />
-          <Icon
-            name="cog-outline"
-            type="material-community"
-            size={25}
-            color="white"
-            onPress={() => {
-              navigation.navigate("Settings");
-              console.log("clicked");
-            }}
-          />
+
+          {navigation !== null && (
+            <Icon
+              name="cog-outline"
+              type="material-community"
+              size={25}
+              color="white"
+              onPress={() => {
+                navigation.navigate("Settings");
+                console.log("clicked");
+              }}
+            />
+          )}
         </View>
-        {cars.indexOf(currentCar) !== 0 && (
+        {cars.indexOf(currentCar) !== 0 && garage.length < 1 && (
           <View style={{ position: "absolute", top: "50%", left: 1 }}>
             <Icon
               name="arrow-left"
@@ -84,7 +89,7 @@ const UserProfile = ({ navigation, garageArr }) => {
             />
           </View>
         )}
-        {cars.indexOf(currentCar) < cars.length - 1 && (
+        {cars.indexOf(currentCar) < cars.length - 1 && garage.length > 1 && (
           <View style={{ position: "absolute", top: "50%", right: 1 }}>
             <Icon
               name="arrow-right"
