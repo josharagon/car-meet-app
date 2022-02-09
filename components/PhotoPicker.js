@@ -69,6 +69,7 @@ export default function SimpleImagePicker() {
               images={images}
               setImages={setImages}
               index={index}
+              key={index}
             />
           ))}
       </ScrollView>

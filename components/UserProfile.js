@@ -18,8 +18,9 @@ import ModificationCard from "./ModificationCard";
 import firebase from "firebase";
 import { Swipeable } from "react-native-gesture-handler";
 
-const UserProfile = ({ navigation }) => {
-  const [currentCar, setCurrentCar] = useState(cars[0]);
+const UserProfile = ({ navigation, garageArr }) => {
+  const [garage, setGarage] = useState(garageArr);
+  const [currentCar, setCurrentCar] = useState(garage[0]);
   const [loaded, setLoaded] = useState(false);
   const windowWidth = Dimensions.get("window").width;
   const windowHeight = Dimensions.get("window").height;
@@ -186,7 +187,7 @@ const UserProfile = ({ navigation }) => {
                 fontSize: windowHeight / 50,
               }}
             >
-              {`${currentCar.power.ft_lb} FT-LB`}
+              {`${currentCar.power.torque} FT-LB`}
             </Text>
           </View>
         </View>
@@ -251,7 +252,7 @@ const cars = [
     year: "2018",
     color: "Platinum White",
     trim: "ST",
-    power: { hp: "300", ft_lb: "300" },
+    power: { hp: "300", torque: "300" },
     images: [
       {
         source: require("../assets/images/fist.png"),
@@ -295,7 +296,7 @@ const cars = [
     year: "2020",
     color: "Nitro Yellow",
     trim: "Premium",
-    power: { hp: "800", ft_lb: "725" },
+    power: { hp: "800", torque: "725" },
     images: [
       {
         uri: "https://www.motortrend.com/uploads/sites/5/2020/04/2020-Toyota-GR-Supra-27.jpg?fit=around%7C960:600",

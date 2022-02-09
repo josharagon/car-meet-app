@@ -212,10 +212,13 @@ const WelcomeNewUser = ({ name }) => {
   };
 
   const pageThreeSubmit = () => {
+    console.log(garage);
     if (power.hp && power.torque && selectedColor) {
       if (garage.length - 1 === n) {
+        setCarData();
         setPage(page + 1);
       } else {
+        setCarData();
         setN(n + 1);
         reloadCarDetails();
         resetCarDetails();
@@ -263,6 +266,15 @@ const WelcomeNewUser = ({ name }) => {
     setSelectedTrim("");
     setPower({ hp: "", torque: "" });
     setCarModifications([]);
+  };
+
+  const setCarData = () => {
+    const car = garage[n];
+    car["color"] = selectedColor;
+    car["trim"] = selectedTrim;
+    car["power"] = power;
+    car["modifications"] = carModifications;
+    // car['images'] = images;
   };
 
   useEffect(() => {
