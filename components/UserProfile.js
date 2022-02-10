@@ -18,14 +18,14 @@ import ModificationCard from "./ModificationCard";
 import firebase from "firebase";
 import { Swipeable } from "react-native-gesture-handler";
 
-const UserProfile = ({ navigation, garageArr }) => {
+const UserProfile = ({ navigation, garageArr, userName }) => {
   const [garage, setGarage] = useState(garageArr);
   const [currentCar, setCurrentCar] = useState(garage[0]);
   const [loaded, setLoaded] = useState(false);
   const windowWidth = Dimensions.get("window").width;
   const windowHeight = Dimensions.get("window").height;
 
-  console.log(garage.length);
+  console.log(garage.indexOf(currentCar));
 
   const logOut = () => {
     firebase.auth().signOut();
@@ -45,20 +45,28 @@ const UserProfile = ({ navigation, garageArr }) => {
             width: "90%",
           }}
         >
-          <Text
+          <View
             style={{
-              textAlign: "center",
-              color: "white",
-              fontSize: 18,
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-evenly",
+              alignContent: "center",
             }}
           >
-            @st.joshy's Garage
-          </Text>
-          <Image
-            source={require("../assets/images/verified.png")}
-            style={{ height: 20, width: 20, position: "absolute", left: 160 }}
-          />
-
+            <Text
+              style={{
+                textAlign: "center",
+                color: "white",
+                fontSize: 18,
+              }}
+            >
+              @{userName}'s Garage
+            </Text>
+            <Image
+              source={require("../assets/images/verified.png")}
+              style={{ height: 20, width: 20, position: "absolute" }}
+            />
+          </View>
           {navigation !== null && (
             <Icon
               name="cog-outline"
@@ -72,16 +80,17 @@ const UserProfile = ({ navigation, garageArr }) => {
             />
           )}
         </View>
-        {cars.indexOf(currentCar) !== 0 && garage.length < 1 && (
-          <View style={{ position: "absolute", top: "50%", left: 1 }}>
+        {garage.indexOf(currentCar) !== 0 && garage.length > 1 && (
+          <View
+            style={{ position: "absolute", top: "50%", left: 1, zIndex: 999 }}
+          >
             <Icon
               name="arrow-left"
               size={40}
               color="white"
               onPress={() => {
-                setCurrentCar(cars[cars.indexOf(currentCar) - 1]);
+                setCurrentCar(garage[garage.indexOf(currentCar) - 1]);
                 setLoaded(true);
-                currentImages = cars[0].images;
                 setTimeout(() => {
                   setLoaded(false);
                 }, 1);
@@ -89,16 +98,17 @@ const UserProfile = ({ navigation, garageArr }) => {
             />
           </View>
         )}
-        {cars.indexOf(currentCar) < cars.length - 1 && garage.length > 1 && (
-          <View style={{ position: "absolute", top: "50%", right: 1 }}>
+        {garage.indexOf(currentCar) === 0 && garage.length > 1 && (
+          <View
+            style={{ position: "absolute", top: "50%", right: 1, zIndex: 999 }}
+          >
             <Icon
               name="arrow-right"
               size={40}
               color="white"
               onPress={() => {
-                setCurrentCar(cars[cars.indexOf(currentCar) + 1]);
+                setCurrentCar(garage[garage.indexOf(currentCar) + 1]);
                 setLoaded(true);
-                currentImages = cars[1].images;
                 setTimeout(() => {
                   setLoaded(false);
                 }, 1);

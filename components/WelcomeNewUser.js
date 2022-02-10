@@ -36,7 +36,7 @@ const WelcomeNewUser = ({ name }) => {
   const [selectedColor, setSelectedColor] = useState("");
   const [colorError, setColorError] = useState(false);
   const [carModifications, setCarModifications] = useState([]);
-  const [uploadedImages, setUploadedImages] = useState([]);
+  const [images, setImages] = useState([]);
   const [selectedMod, setSelectedMod] = useState("Downpipe");
   const [brandName, setBrandName] = useState("");
   const [selectedTrim, setSelectedTrim] = useState("");
@@ -224,6 +224,7 @@ const WelcomeNewUser = ({ name }) => {
         setN(n + 1);
         reloadCarDetails();
         resetCarDetails();
+        setImages([]);
       }
     } else if (
       power.hp === "" ||
@@ -276,7 +277,19 @@ const WelcomeNewUser = ({ name }) => {
     car["trim"] = selectedTrim;
     car["power"] = power;
     car["modifications"] = carModifications;
-    car["images"] = uploadedImages;
+    car["images"] = handleImage(images);
+  };
+
+  const handleImage = (images) => {
+    let newArr = [];
+
+    images.map((image) => {
+      newArr.push({
+        uri: image,
+        dimensions: { width: 1080, height: 1920 },
+      });
+    });
+    return newArr;
   };
 
   useEffect(() => {
@@ -903,10 +916,7 @@ const WelcomeNewUser = ({ name }) => {
           >
             Upload Images:
           </Text>
-          <SimpleImagePicker
-            uploadedImages={uploadedImages}
-            setUploadedImages={setUploadedImages}
-          />
+          <SimpleImagePicker images={images} setImages={setImages} />
           {colorError && (
             <Text
               style={{ textAlign: "center", color: "red", marginBottom: 8 }}
@@ -945,6 +955,30 @@ const WelcomeNewUser = ({ name }) => {
             opacity: fadeAnim,
           }}
         >
+          <Icon
+            name="arrow-back-outline"
+            type="ionicon"
+            color="white"
+            size={25}
+            style={{ alignSelf: "left", paddingLeft: windowWidth * 0.045 }}
+            onPress={() => {
+              setPage(page - 1);
+            }}
+          />
+          <Text
+            style={{
+              textAlign: "center",
+              color: "#ffffff",
+              fontSize: windowWidth * 0.06,
+            }}
+          >
+            preview your profile
+          </Text>
+          <UserProfile
+            navigation={null}
+            garageArr={garage}
+            userName={userName}
+          />
           <Button
             onPress={() => {
               setPage(page - 1);
@@ -952,7 +986,6 @@ const WelcomeNewUser = ({ name }) => {
           >
             back
           </Button>
-          <UserProfile navigation={null} garageArr={garage} />
         </Animated.View>
       )}
     </View>

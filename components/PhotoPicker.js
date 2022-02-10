@@ -6,12 +6,9 @@ import AddImageContainer from "./AddImageContainer";
 import UploadedImage from "./UploadedImage";
 import { ScrollView } from "react-native-gesture-handler";
 
-export default function SimpleImagePicker({
-  uploadedImages,
-  setUploadedImages,
-}) {
+export default function SimpleImagePicker({ images, setImages }) {
   const [image, setImage] = useState(null);
-  const [images, setImages] = useState([]);
+  // const [images, setImages] = useState([]);
 
   useEffect(() => {
     (async () => {
@@ -43,12 +40,9 @@ export default function SimpleImagePicker({
     if (!result.cancelled) {
       console.log(result.uri);
       setImage(result.uri);
-      setImages((images) => [...images, result.uri]);
-      setUploadedImages((uploadedImages) => [
-        ...uploadedImages,
-        { uri: result.uri, dimensions: { width: 1080, height: 1920 } },
-      ]);
-      console.log(uploadedImages);
+      setImages([...images, result.uri]);
+      // setUploadedImages((uploadedImages) => [...uploadedImages, result.uri]);
+      console.log(images);
       setImage(null);
     }
   };
