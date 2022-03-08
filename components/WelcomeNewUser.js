@@ -1,5 +1,6 @@
 import React, { Fragment, useState, useRef, useEffect } from "react";
 import {
+  ActivityIndicator,
   StyleSheet,
   Text,
   View,
@@ -16,7 +17,10 @@ import Button from "react-native-flat-button";
 import ModificationCard from "./ModificationCard";
 
 import { Picker } from "@react-native-picker/picker";
-import firebase from "firebase";
+
+import * as firebase from "firebase";
+import { getStorage, ref, uploadBytes } from "firebase/storage";
+
 import { Icon } from "react-native-elements";
 import SettingTab from "./SettingTab";
 import { Input } from "react-native-elements/dist/input/Input";
@@ -52,6 +56,7 @@ const WelcomeNewUser = ({ name }) => {
   const [n, setN] = useState(0);
   const [power, setPower] = useState({ hp: "", torque: "" });
   const [powerError, setPowerError] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
 
   const windowWidth = Dimensions.get("window").width;
   const windowHeight = Dimensions.get("window").height;
@@ -102,6 +107,7 @@ const WelcomeNewUser = ({ name }) => {
       carObj.make = selectedMake;
       carObj.model = selectedModel;
       carObj.year = selectedYear;
+      carObj.id = Math.floor(Math.random() * 100);
       garage.push(carObj);
       setSelectedMake("acura");
       setSelectedModel("Ilx");
@@ -136,6 +142,7 @@ const WelcomeNewUser = ({ name }) => {
       return {
         key:
           car.year + " " + formatText(car.make) + " " + formatText(car.model),
+        i: index,
       };
     });
   };
@@ -214,7 +221,6 @@ const WelcomeNewUser = ({ name }) => {
   };
 
   const pageThreeSubmit = () => {
-    console.log(garage);
     if (power.hp && power.torque && selectedColor) {
       if (garage.length - 1 === n) {
         setCarData();
@@ -282,14 +288,63 @@ const WelcomeNewUser = ({ name }) => {
 
   const handleImage = (images) => {
     let newArr = [];
-
+    let imageCounter = 1;
     images.map((image) => {
       newArr.push({
         uri: image,
         dimensions: { width: 1080, height: 1920 },
+        name: `${garage[n].year}${garage[n].make}${garage[n].model}${
+          garage[n].id
+        }${imageCounter.toString().length === 1 ? "0" : ""}${imageCounter}`,
       });
+      imageCounter++;
     });
     return newArr;
+  };
+
+  const submitPost = async () => {
+    const uploadURI = garage[n].images[0].uri;
+    let fileName = garage[n].images[0].name;
+
+    uploadImage(uploadURI, fileName)
+      .then(() => {
+        console.log("uploaded");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const uploadImage = async (uri, name) => {
+    setIsUploading(true);
+    const response = await fetch(uri);
+    const blob = await response.blob();
+
+    var ref = firebase
+      .storage()
+      .ref()
+      .child(`${firebase.auth().currentUser.uid}/` + name);
+    ref.put(blob).then(() => {
+      setIsUploading(false);
+    });
+  };
+
+  const storeUserData = async (garageArr) => {
+    let user = firebase.auth().currentUser;
+    await garageArr.forEach((car) => {
+      car.images.map((image) => {
+        uploadImage(image.uri, image.name + ".jpg");
+      });
+    });
+
+    firebase
+      .database()
+      .ref("users/" + user.uid)
+      .set({
+        username: selectedUserName,
+        email: user.providerData[0].email,
+        profile: garage,
+      });
   };
 
   useEffect(() => {
@@ -579,6 +634,11 @@ const WelcomeNewUser = ({ name }) => {
           <Text style={{ textAlign: "center", color: "#ffffff" }}>
             Your Garage:
           </Text>
+          <Text
+            style={{ textAlign: "center", color: "#ffffff", opacity: "0.3" }}
+          >
+            Long Press to remove from garage:
+          </Text>
           <FlatList
             data={handleGarageList()}
             textColor={{ color: "#ffffff" }}
@@ -587,7 +647,10 @@ const WelcomeNewUser = ({ name }) => {
             renderItem={({ item }) => (
               <Text
                 style={styles.item}
-                onLongPress={() => console.log("longPress")}
+                onLongPress={() => {
+                  //remove car from garage
+                  setGarage(garage.filter((_, i) => i !== item.i));
+                }}
               >
                 {item.key}
               </Text>
@@ -627,6 +690,16 @@ const WelcomeNewUser = ({ name }) => {
             overflow: "hidden",
           }}
         >
+          <Icon
+            name="arrow-back-outline"
+            type="ionicon"
+            color="white"
+            size={25}
+            style={{ alignSelf: "left", paddingLeft: windowWidth * 0.045 }}
+            onPress={() => {
+              setPage(page - 1);
+            }}
+          />
           {/* <View
             style={{
               display: "flex",
@@ -940,7 +1013,10 @@ const WelcomeNewUser = ({ name }) => {
               alignSelf: "center",
               borderRadius: 1,
             }}
-            onPress={() => pageThreeSubmit()}
+            onPress={() => {
+              console.log("s", garage, "e");
+              pageThreeSubmit();
+            }}
           >
             Next
           </Button>
@@ -979,13 +1055,17 @@ const WelcomeNewUser = ({ name }) => {
             garageArr={garage}
             userName={userName}
           />
-          <Button
-            onPress={() => {
-              setPage(page - 1);
-            }}
-          >
-            back
-          </Button>
+          {!isUploading ? (
+            <Button
+              onPress={() => {
+                // submitPost();
+                storeUserData(garage);
+              }}
+            >
+              upload to s3
+            </Button>
+          ) : null}
+          {isUploading ? <ActivityIndicator color={"#fff"} /> : null}
         </Animated.View>
       )}
     </View>

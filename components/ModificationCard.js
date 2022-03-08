@@ -13,7 +13,7 @@ import {
 const ModificationCard = ({ type, name }) => {
   const windowWidth = Dimensions.get("window").width;
   const windowHeight = Dimensions.get("window").height;
-
+  console.log(type, name + " " + "logged");
   let itemUrl = `../assets/images/${type}.png`;
   const allParts = {
     Turbo: { url: require("../assets/images/turbo.png") },

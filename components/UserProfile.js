@@ -49,8 +49,9 @@ const UserProfile = ({ navigation, garageArr, userName }) => {
             style={{
               display: "flex",
               flexDirection: "row",
-              justifyContent: "space-evenly",
+              justifyContent: "space-between",
               alignContent: "center",
+              width: "45%",
             }}
           >
             <Text
@@ -64,7 +65,7 @@ const UserProfile = ({ navigation, garageArr, userName }) => {
             </Text>
             <Image
               source={require("../assets/images/verified.png")}
-              style={{ height: 20, width: 20, position: "absolute" }}
+              style={{ height: 20, width: 20 }}
             />
           </View>
           {navigation !== null && (
