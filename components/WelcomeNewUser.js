@@ -29,7 +29,7 @@ import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import SimpleImagePicker from "./PhotoPicker";
 import UserProfile from "./UserProfile";
 
-const WelcomeNewUser = ({ name }) => {
+const WelcomeNewUser = ({ name, setAccountType }) => {
   const [page, setPage] = useState(1);
   const [userNameAvailable, setUserNameAvailable] = useState(null);
   const [userName, setUserName] = useState("");
@@ -343,6 +343,7 @@ const WelcomeNewUser = ({ name }) => {
       .set({
         username: selectedUserName,
         email: user.providerData[0].email,
+        tutorialCompleted: true,
         profile: garage,
       });
   };
@@ -634,9 +635,7 @@ const WelcomeNewUser = ({ name }) => {
           <Text style={{ textAlign: "center", color: "#ffffff" }}>
             Your Garage:
           </Text>
-          <Text
-            style={{ textAlign: "center", color: "#ffffff", opacity: "0.3" }}
-          >
+          <Text style={{ textAlign: "center", color: "#ffffff", opacity: 0.3 }}>
             Long Press to remove from garage:
           </Text>
           <FlatList
@@ -1058,8 +1057,9 @@ const WelcomeNewUser = ({ name }) => {
           {!isUploading ? (
             <Button
               onPress={() => {
-                // submitPost();
+                submitPost();
                 storeUserData(garage);
+                setAccountType(true);
               }}
             >
               upload to s3

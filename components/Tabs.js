@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -11,25 +11,9 @@ import Settings from "./Settings";
 
 const Tab = createBottomTabNavigator();
 
-function ProfileStackScreen() {
-  return (
-    <ProfileStack.Navigator>
-      <ProfileStack.Screen
-        name="Home"
-        options={{ headerShown: false }}
-        component={UserProfile}
-      />
-      <ProfileStack.Screen
-        name="Settings"
-        options={{ headerShown: false }}
-        component={Settings}
-      />
-    </ProfileStack.Navigator>
-  );
-}
 const ProfileStack = createStackNavigator();
 
-const Tabs = () => {
+const Tabs = ({ currentDriver }) => {
   return (
     <Tab.Navigator
       screenOptions={{
@@ -90,9 +74,37 @@ const Tabs = () => {
           ),
         }}
         component={ProfileStackScreen}
+        initialParams={{ dude: currentDriver }}
       />
     </Tab.Navigator>
   );
 };
+
+function ProfileStackScreen({ route, navigation }) {
+  console.log(route.params);
+  useEffect(() => {
+    if (route.params?.currentDriver) {
+      console.log(route.params.currentDriver);
+    } else {
+      console.log("no current driver", route.params);
+    }
+  }, [route.params?.currentDriver]);
+
+  return (
+    <ProfileStack.Navigator>
+      <ProfileStack.Screen
+        name="Home"
+        options={{ headerShown: false }}
+        component={UserProfile}
+        initialParams={{ currentDriver: null }}
+      />
+      <ProfileStack.Screen
+        name="Settings"
+        options={{ headerShown: false }}
+        component={Settings}
+      />
+    </ProfileStack.Navigator>
+  );
+}
 
 export default Tabs;

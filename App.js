@@ -54,30 +54,42 @@ export default function App() {
   const [currentUser, setCurrentUser] = useState(null);
   const [loggedIn, setLoggedIn] = useState(false);
   const [accountType, setAccountType] = useState(false);
+  const [currentDriver, setCurrentDriver] = useState(null);
 
-  const accountSetUp = () => {
-    var ref = firebase.database().ref(`users/${user.uid}`);
-    ref.once("value").then(function (snapshot) {
-      var name = snapshot.child("username").val().exists();
-      if (name) {
-        setAccountType(true);
+  useEffect(() => {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        setCurrentUser(user);
+        setLoggedIn(true);
+        accountSetUp(user);
       } else {
-        setAccountType(false);
+        setLoggedIn(false);
+        setCurrentUser(null);
       }
     });
+  }, []);
+
+  const accountSetUp = (user) => {
+    return firebase
+      .database()
+      .ref(`/users/${user.uid}`)
+      .once("value")
+      .then((snapshot) => {
+        if (snapshot.child("tutorialCompleted").exists()) {
+          setAccountType(true);
+          return setCurrentDriver(snapshot.val().profile);
+        }
+      });
   };
 
-  firebase.auth().onAuthStateChanged((user) => {
-    if (user) {
-      setCurrentUser(user);
-      setLoggedIn(true);
-      // accountSetUp();
-    } else {
-      setLoggedIn(false);
-      setCurrentUser(null);
-    }
-  });
-
+  const getUserData = (uid) => {
+    firebase
+      .database()
+      .ref("users/" + uid)
+      .once("value", (snap) => {
+        console.log(snap.val());
+      });
+  };
   // const auth = getAuth();
   // const user = auth.currentUser;
 
@@ -107,7 +119,10 @@ export default function App() {
       )}
 
       {loggedIn && !accountType && (
-        <WelcomeNewUser name={currentUser.displayName} />
+        <WelcomeNewUser
+          name={currentUser.displayName}
+          setAccountType={setAccountType}
+        />
       )}
 
       {loggedIn && accountType && (
@@ -118,7 +133,7 @@ export default function App() {
             backgroundColor="#212121"
             translucent={true}
           />
-          <Tabs />
+          <Tabs currentDriver={currentDriver} />
           <SafeAreaView style={{ backgroundColor: "#212121" }} />
         </NavigationContainer>
       )}
