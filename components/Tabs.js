@@ -8,12 +8,14 @@ import MainMap from "./MainMap.js";
 import UserSearch from "./UserSearch";
 import UserProfile from "./UserProfile";
 import Settings from "./Settings";
+import ProfileStackScreen from "./ProfileStackScreen.js";
 
 const Tab = createBottomTabNavigator();
 
 const ProfileStack = createStackNavigator();
 
 const Tabs = ({ currentDriver }) => {
+  let accountStuff = currentDriver;
   return (
     <Tab.Navigator
       screenOptions={{
@@ -61,6 +63,7 @@ const Tabs = ({ currentDriver }) => {
         }}
         component={UserSearch}
       />
+
       <Tab.Screen
         name="Profile"
         options={{
@@ -73,38 +76,42 @@ const Tabs = ({ currentDriver }) => {
             />
           ),
         }}
-        component={ProfileStackScreen}
-        initialParams={{ dude: currentDriver }}
+        children={() => <ProfileStackScreen accountData={accountStuff} />}
+        // initialParams={{ accountData: accountStuff }}
+        // component={ProfileStackScreen}
       />
     </Tab.Navigator>
   );
 };
 
-function ProfileStackScreen({ route, navigation }) {
-  console.log(route.params);
-  useEffect(() => {
-    if (route.params?.currentDriver) {
-      console.log(route.params.currentDriver);
-    } else {
-      console.log("no current driver", route.params);
-    }
-  }, [route.params?.currentDriver]);
+// const ProfileStackScreen = ({ route, navigation }) => {
+//   useEffect(() => {
+//     console.log(route.params);
+//     if (route.params?.accountData) {
+//       console.log(route.params.accountData);
+//     } else {
+//       console.log("no current driver", route.params.accountData);
+//     }
+//   }, [route.params?.accountData]);
 
-  return (
-    <ProfileStack.Navigator>
-      <ProfileStack.Screen
-        name="Home"
-        options={{ headerShown: false }}
-        component={UserProfile}
-        initialParams={{ currentDriver: null }}
-      />
-      <ProfileStack.Screen
-        name="Settings"
-        options={{ headerShown: false }}
-        component={Settings}
-      />
-    </ProfileStack.Navigator>
-  );
-}
+//   return (
+//     <ProfileStack.Navigator>
+//       <ProfileStack.Screen
+//         name="Home"
+//         options={{
+//           headerShown: false,
+//           params: { account: route.params?.accountData },
+//         }}
+//         component={UserProfile}
+//         initialParams={{ currentDriver: route.params.account }}
+//       />
+//       <ProfileStack.Screen
+//         name="Settings"
+//         options={{ headerShown: false }}
+//         component={Settings}
+//       />
+//     </ProfileStack.Navigator>
+//   );
+// };
 
 export default Tabs;

@@ -25,7 +25,9 @@ const UserProfile = ({ navigation, garageArr, userName, currentDriver }) => {
   const windowWidth = Dimensions.get("window").width;
   const windowHeight = Dimensions.get("window").height;
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    console.log("yo", currentDriver);
+  }, []);
 
   // console.log(garage.indexOf(currentCar));
 
