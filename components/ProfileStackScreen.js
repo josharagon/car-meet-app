@@ -11,7 +11,7 @@ import Settings from "./Settings";
 
 const ProfileStack = createStackNavigator();
 
-const ProfileStackScreen = ({ accountData }) => {
+const ProfileStackScreen = ({ accountData, navigation }) => {
   useEffect(() => {
     // console.log(route.params);
     // if (route.params?.accountData) {
@@ -28,7 +28,12 @@ const ProfileStackScreen = ({ accountData }) => {
         options={{
           headerShown: false,
         }}
-        children={() => <UserProfile currentDriver={accountData} />}
+        children={() => (
+          <UserProfile
+            userName={accountData.username}
+            garageArr={accountData.profile}
+          />
+        )}
       />
       <ProfileStack.Screen
         name="Settings"

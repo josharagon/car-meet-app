@@ -77,7 +77,7 @@ export default function App() {
       .then((snapshot) => {
         if (snapshot.child("tutorialCompleted").exists()) {
           setAccountType(true);
-          return setCurrentDriver(snapshot.val().profile);
+          return setCurrentDriver(snapshot.val());
         }
       });
   };

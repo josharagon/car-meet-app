@@ -17,17 +17,18 @@ import {
 import ModificationCard from "./ModificationCard";
 import firebase from "firebase";
 import { Swipeable } from "react-native-gesture-handler";
+import { useNavigation } from "@react-navigation/native";
 
-const UserProfile = ({ navigation, garageArr, userName, currentDriver }) => {
+const UserProfile = ({ garageArr, userName }) => {
+  const navigation = useNavigation();
+
   const [garage, setGarage] = useState(garageArr);
-  // const [currentCar, setCurrentCar] = useState(garage[0]);
+  const [currentCar, setCurrentCar] = useState(garage[0]);
   const [loaded, setLoaded] = useState(false);
   const windowWidth = Dimensions.get("window").width;
   const windowHeight = Dimensions.get("window").height;
 
-  useEffect(() => {
-    console.log("yo", currentDriver);
-  }, []);
+  useEffect(() => {}, []);
 
   // console.log(garage.indexOf(currentCar));
 
@@ -36,219 +37,218 @@ const UserProfile = ({ navigation, garageArr, userName, currentDriver }) => {
   };
 
   return (
-    <Text>LOL</Text>
-    // <ScrollView style={styles.statusBar} scrollEnabled={false}>
-    //   <View style={styles.container}>
-    //     <SafeAreaView style={styles.statusBar} />
-    //     <View
-    //       style={{
-    //         display: "flex",
-    //         flexDirection: "row",
-    //         alignItems: "center",
-    //         marginTop: 25,
-    //         justifyContent: "space-between",
-    //         width: "90%",
-    //       }}
-    //     >
-    //       <View
-    //         style={{
-    //           display: "flex",
-    //           flexDirection: "row",
-    //           justifyContent: "space-between",
-    //           alignContent: "center",
-    //           width: "45%",
-    //         }}
-    //       >
-    //         <Text
-    //           style={{
-    //             textAlign: "center",
-    //             color: "white",
-    //             fontSize: 18,
-    //           }}
-    //         >
-    //           @{userName}'s Garage
-    //         </Text>
-    //         <Image
-    //           source={require("../assets/images/verified.png")}
-    //           style={{ height: 20, width: 20 }}
-    //         />
-    //       </View>
-    //       {navigation !== null && (
-    //         <Icon
-    //           name="cog-outline"
-    //           type="material-community"
-    //           size={25}
-    //           color="white"
-    //           onPress={() => {
-    //             navigation.navigate("Settings");
-    //             console.log("clicked");
-    //           }}
-    //         />
-    //       )}
-    //     </View>
-    //     {garage.indexOf(currentCar) !== 0 && garage.length > 1 && (
-    //       <View
-    //         style={{ position: "absolute", top: "50%", left: 1, zIndex: 999 }}
-    //       >
-    //         <Icon
-    //           name="arrow-left"
-    //           size={40}
-    //           color="white"
-    //           onPress={() => {
-    //             setCurrentCar(garage[garage.indexOf(currentCar) - 1]);
-    //             setLoaded(true);
-    //             setTimeout(() => {
-    //               setLoaded(false);
-    //             }, 1);
-    //           }}
-    //         />
-    //       </View>
-    //     )}
-    //     {garage.indexOf(currentCar) === 0 && garage.length > 1 && (
-    //       <View
-    //         style={{ position: "absolute", top: "50%", right: 1, zIndex: 999 }}
-    //       >
-    //         <Icon
-    //           name="arrow-right"
-    //           size={40}
-    //           color="white"
-    //           onPress={() => {
-    //             setCurrentCar(garage[garage.indexOf(currentCar) + 1]);
-    //             setLoaded(true);
-    //             setTimeout(() => {
-    //               setLoaded(false);
-    //             }, 1);
-    //           }}
-    //         />
-    //       </View>
-    //     )}
-    //     {loaded === false && (
-    //       <GallerySwiper
-    //         enableScale={false}
-    //         sensitiveScroll={false}
-    //         style={{
-    //           width: 400,
-    //           height: 200,
-    //           marginTop: 25,
-    //           backgroundColor: "#212121",
-    //         }}
-    //         images={currentCar.images}
-    //         enableTranslate={false}
-    //       />
-    //     )}
-    //     {loaded === true && (
-    //       <ActivityIndicator
-    //         size="large"
-    //         color="white"
-    //         style={{ width: 400, height: 200, marginTop: 25 }}
-    //       />
-    //     )}
+    <ScrollView style={styles.statusBar} scrollEnabled={false}>
+      <View style={styles.container}>
+        <SafeAreaView style={styles.statusBar} />
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            marginTop: 25,
+            justifyContent: "space-between",
+            width: "90%",
+          }}
+        >
+          <View
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignContent: "center",
+              width: "45%",
+            }}
+          >
+            <Text
+              style={{
+                textAlign: "center",
+                color: "white",
+                fontSize: 18,
+              }}
+            >
+              @{userName}'s Garage
+            </Text>
+            <Image
+              source={require("../assets/images/verified.png")}
+              style={{ height: 20, width: 20 }}
+            />
+          </View>
+          {navigation !== null && (
+            <Icon
+              name="cog-outline"
+              type="material-community"
+              size={25}
+              color="white"
+              onPress={() => {
+                navigation.navigate("Settings");
+                console.log("clicked");
+              }}
+            />
+          )}
+        </View>
+        {garage.indexOf(currentCar) !== 0 && garage.length > 1 && (
+          <View
+            style={{ position: "absolute", top: "50%", left: 1, zIndex: 999 }}
+          >
+            <Icon
+              name="arrow-left"
+              size={40}
+              color="white"
+              onPress={() => {
+                setCurrentCar(garage[garage.indexOf(currentCar) - 1]);
+                setLoaded(true);
+                setTimeout(() => {
+                  setLoaded(false);
+                }, 1);
+              }}
+            />
+          </View>
+        )}
+        {garage.indexOf(currentCar) === 0 && garage.length > 1 && (
+          <View
+            style={{ position: "absolute", top: "50%", right: 1, zIndex: 999 }}
+          >
+            <Icon
+              name="arrow-right"
+              size={40}
+              color="white"
+              onPress={() => {
+                setCurrentCar(garage[garage.indexOf(currentCar) + 1]);
+                setLoaded(true);
+                setTimeout(() => {
+                  setLoaded(false);
+                }, 1);
+              }}
+            />
+          </View>
+        )}
+        {loaded === false && (
+          <GallerySwiper
+            enableScale={false}
+            sensitiveScroll={false}
+            style={{
+              width: 400,
+              height: 200,
+              marginTop: 25,
+              backgroundColor: "#212121",
+            }}
+            images={currentCar.images}
+            enableTranslate={false}
+          />
+        )}
+        {loaded === true && (
+          <ActivityIndicator
+            size="large"
+            color="white"
+            style={{ width: 400, height: 200, marginTop: 25 }}
+          />
+        )}
 
-    //     <Text
-    //       style={{
-    //         textAlign: "center",
-    //         color: "white",
-    //         fontSize: windowHeight / 40,
-    //         marginTop: windowHeight / 60,
-    //       }}
-    //     >
-    //       {currentCar.color}
-    //     </Text>
-    //     <Text
-    //       style={{
-    //         textAlign: "center",
-    //         color: "white",
-    //         fontSize: windowHeight / 40,
-    //       }}
-    //     >
-    //       {`${currentCar.year} ${currentCar.make} ${currentCar.model} ${currentCar.trim}`}
-    //     </Text>
+        <Text
+          style={{
+            textAlign: "center",
+            color: "white",
+            fontSize: windowHeight / 40,
+            marginTop: windowHeight / 60,
+          }}
+        >
+          {currentCar.color}
+        </Text>
+        <Text
+          style={{
+            textAlign: "center",
+            color: "white",
+            fontSize: windowHeight / 40,
+          }}
+        >
+          {`${currentCar.year} ${currentCar.make} ${currentCar.model} ${currentCar.trim}`}
+        </Text>
 
-    //     <View
-    //       style={{
-    //         display: "flex",
-    //         flexDirection: "column",
-    //         width: "87.09%",
-    //         marginTop: windowHeight / 40,
-    //       }}
-    //     >
-    //       <Text
-    //         style={{
-    //           textAlign: "left",
-    //           color: "white",
-    //           fontSize: windowHeight / 50,
-    //         }}
-    //       >
-    //         Power
-    //       </Text>
-    //       <View
-    //         style={{
-    //           display: "flex",
-    //           flexDirection: "row",
-    //           justifyContent: "space-evenly",
-    //         }}
-    //       >
-    //         <Text
-    //           style={{
-    //             color: "white",
-    //             backgroundColor: "#2A2A2A",
-    //             padding: windowHeight / 60,
-    //             borderRadius: 13,
-    //             fontSize: windowHeight / 50,
-    //           }}
-    //         >
-    //           {`${currentCar.power.hp} HP`}
-    //         </Text>
-    //         <Text
-    //           style={{
-    //             color: "white",
-    //             backgroundColor: "#2A2A2A",
-    //             padding: windowHeight / 60,
-    //             borderRadius: 13,
-    //             fontSize: windowHeight / 50,
-    //           }}
-    //         >
-    //           {`${currentCar.power.torque} FT-LB`}
-    //         </Text>
-    //       </View>
-    //     </View>
-    //     <View
-    //       style={{
-    //         display: "flex",
-    //         flexDirection: "column",
-    //         width: "87.09%",
-    //         marginTop: 20,
-    //       }}
-    //     >
-    //       <Text
-    //         style={{
-    //           textAlign: "left",
-    //           color: "white",
-    //           fontSize: windowHeight / 50,
-    //           marginTop: windowHeight / 40,
-    //         }}
-    //       >
-    //         Modifications
-    //       </Text>
-    //       <ScrollView
-    //         horizontal={true}
-    //         showsHorizontalScrollIndicator={false}
-    //         style={{ width: "100%" }}
-    //       >
-    //         {currentCar.modifications.map((modification) => {
-    //           return (
-    //             <ModificationCard
-    //               type={modification.type}
-    //               name={modification.name}
-    //               key={modification.name}
-    //             />
-    //           );
-    //         })}
-    //       </ScrollView>
-    //     </View>
-    //     {/* <Button title="sign out" onPress={() => logOut()} /> */}
-    //   </View>
-    // </ScrollView>
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            width: "87.09%",
+            marginTop: windowHeight / 40,
+          }}
+        >
+          <Text
+            style={{
+              textAlign: "left",
+              color: "white",
+              fontSize: windowHeight / 50,
+            }}
+          >
+            Power
+          </Text>
+          <View
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-evenly",
+            }}
+          >
+            <Text
+              style={{
+                color: "white",
+                backgroundColor: "#2A2A2A",
+                padding: windowHeight / 60,
+                borderRadius: 13,
+                fontSize: windowHeight / 50,
+              }}
+            >
+              {`${currentCar.power.hp} HP`}
+            </Text>
+            <Text
+              style={{
+                color: "white",
+                backgroundColor: "#2A2A2A",
+                padding: windowHeight / 60,
+                borderRadius: 13,
+                fontSize: windowHeight / 50,
+              }}
+            >
+              {`${currentCar.power.torque} FT-LB`}
+            </Text>
+          </View>
+        </View>
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            width: "87.09%",
+            marginTop: 20,
+          }}
+        >
+          <Text
+            style={{
+              textAlign: "left",
+              color: "white",
+              fontSize: windowHeight / 50,
+              marginTop: windowHeight / 40,
+            }}
+          >
+            Modifications
+          </Text>
+          <ScrollView
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            style={{ width: "100%" }}
+          >
+            {currentCar.modifications?.map((modification) => {
+              return (
+                <ModificationCard
+                  type={modification.type}
+                  name={modification.name}
+                  key={modification.name}
+                />
+              );
+            })}
+          </ScrollView>
+        </View>
+        {/* <Button title="sign out" onPress={() => logOut()} /> */}
+      </View>
+    </ScrollView>
   );
 };
 
