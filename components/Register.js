@@ -89,6 +89,7 @@ const Register = () => {
         .auth()
         .createUserWithEmailAndPassword(email, password)
         .then((res) => {
+          console.log(res.user);
           res.user.updateProfile({
             displayName: displayName,
           });
@@ -103,7 +104,7 @@ const Register = () => {
     }
   };
 
-  const { navigation } = useNavigation();
+  const navigation = useNavigation();
 
   if (isLoading) {
     return (

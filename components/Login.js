@@ -38,7 +38,7 @@ const Login = ({ loggedIn, setLoggedIn }) => {
     }
   };
 
-  const { navigation } = useNavigation();
+  const navigation = useNavigation();
 
   if (isLoading) {
     return (
