@@ -23,12 +23,14 @@ import Tabs from "./components/Tabs";
 import Register from "./components/Register.js";
 import Landing from "./components/Landing.js";
 import Login from "./components/Login.js";
+import HostApplication from "./components/HostApplication.js";
+import HostTabs from "./components/HostTabs.js";
+import WelcomeNewUser from "./components/WelcomeNewUser.js";
 
 import { firebaseConfig } from "./database/firebase.js";
 import { getStorage } from "firebase/storage";
 import { getDatabase, ref, set } from "firebase/database";
 import { getAuth } from "firebase/auth";
-import WelcomeNewUser from "./components/WelcomeNewUser.js";
 
 if (firebase.apps.length === 0) {
   firebase.initializeApp(firebaseConfig);
@@ -51,23 +53,44 @@ db.collection("users")
 export default function App() {
   const Stack = createNativeStackNavigator();
 
-  const [currentUser, setCurrentUser] = useState(null);
-  const [loggedIn, setLoggedIn] = useState(false);
-  const [accountType, setAccountType] = useState(false);
-  const [currentDriver, setCurrentDriver] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null); //firebase auth object
+  const [loggedIn, setLoggedIn] = useState(false); //signed in or not
+  const [accountType, setAccountType] = useState(false); //tutorial complete status
+  const [currentDriver, setCurrentDriver] = useState(null); // user profile with garage data
+  const [currentHost, setCurrentHost] = useState(null); //host account or no
+
+  const [meetHost, setMeetHost] = useState(false);
 
   useEffect(() => {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         setCurrentUser(user);
+        checkHostStatus(user);
         setLoggedIn(true);
-        accountSetUp(user);
+        if (!meetHost) {
+          accountSetUp(user);
+        }
       } else {
         setLoggedIn(false);
         setCurrentUser(null);
       }
     });
   }, []);
+
+  const checkHostStatus = (user) => {
+    return firebase
+      .database()
+      .ref(`/users/${user.uid}`)
+      .once("value")
+      .then((snapshot) => {
+        if (snapshot.child("hostAccount").exists()) {
+          setMeetHost(true);
+          return true;
+        } else {
+          return false;
+        }
+      });
+  };
 
   const accountSetUp = (user) => {
     return firebase
@@ -108,6 +131,7 @@ export default function App() {
             <Stack.Screen name="Landing" component={Landing} />
             <Stack.Screen name="Register" component={Register} />
             <Stack.Screen name="Tabs" component={Tabs} />
+            <Stack.Screen name="HostApplication" component={HostApplication} />
 
             <Stack.Screen name="Login">
               {(props) => (
@@ -118,7 +142,7 @@ export default function App() {
         </NavigationContainer>
       )}
 
-      {loggedIn && !accountType && (
+      {loggedIn && !accountType && !meetHost && (
         <WelcomeNewUser
           name={currentUser.displayName}
           setAccountType={setAccountType}
@@ -134,6 +158,19 @@ export default function App() {
             translucent={true}
           />
           <Tabs currentDriver={currentDriver} />
+          <SafeAreaView style={{ backgroundColor: "#212121" }} />
+        </NavigationContainer>
+      )}
+
+      {loggedIn && meetHost && (
+        <NavigationContainer>
+          <StatusBar
+            barStyle="light-content"
+            hidden={false}
+            backgroundColor="#212121"
+            translucent={true}
+          />
+          <HostTabs currentHost={currentHost} />
           <SafeAreaView style={{ backgroundColor: "#212121" }} />
         </NavigationContainer>
       )}

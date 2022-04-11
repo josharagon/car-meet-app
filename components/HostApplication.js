@@ -1,63 +1,3 @@
-// import React, { Component } from "react";
-// import { View, Button, TextInput, SafeAreaView } from "react-native";
-
-// import firebase from "firebase";
-
-// export default class Register extends Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = {
-//       username: "",
-//       password: "",
-//       email: "",
-//     };
-//     this.onSignUp = this.onSignUp.bind(this);
-//   }
-
-//   onSignUp() {
-//     const { email, password, username } = this.state;
-//     firebase
-//       .auth()
-//       .createUserWithEmailAndPassword(email, password)
-//       .then((result) => {
-//         console.log(result);
-//       })
-//       .catch((error) => {
-//         console.log(error);
-//       });
-//   }
-
-//   render() {
-//     return (
-//       <View style={{ backgroundColor: "#212121" }}>
-//         <SafeAreaView />
-//         <TextInput
-//           style={{ height: 40, borderColor: "gray", borderWidth: 1 }}
-//           onChangeText={(username) => this.setState({ username })}
-//           value={this.state.username}
-//           placeholder="Username"
-//         />
-//         <TextInput
-//           style={{ height: 40, borderColor: "gray", borderWidth: 1 }}
-//           onChangeText={(password) => this.setState({ password })}
-//           value={this.state.password}
-//           placeholder="Password"
-//         />
-//         <TextInput
-//           style={{ height: 40, borderColor: "gray", borderWidth: 1 }}
-//           onChangeText={(email) => this.setState({ email })}
-//           value={this.state.email}
-//           placeholder="Email"
-//         />
-//         <Button
-//           onPress={() => this.props.navigation.navigate("Home")}
-//           title="Register"
-//         />
-//       </View>
-//     );
-//   }
-// }
-
 import React, { Component, useState } from "react";
 import {
   StyleSheet,
@@ -74,13 +14,15 @@ import firebase from "firebase";
 import Login from "./Login";
 
 const Register = () => {
+  var provider = new firebase.auth.GoogleAuthProvider();
+
   const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const registerUser = () => {
+  const registerHost = () => {
     if (email === "" && password === "") {
       Alert.alert("Enter details to signup!");
     } else {
@@ -89,16 +31,22 @@ const Register = () => {
         .auth()
         .createUserWithEmailAndPassword(email, password)
         .then((res) => {
-          console.log(res.user);
           res.user.updateProfile({
             displayName: displayName,
+            meetHost: true,
           });
+          firebase
+            .database()
+            .ref("users/" + res.user.uid)
+            .set({
+              hostAccount: true,
+              meetName: displayName,
+            });
           console.log("User registered successfully!");
           setIsLoading(false);
           setDisplayName("");
           setEmail("");
           setPassword("");
-          navigation.navigate("Login");
         })
         .catch((error) => setError(error.message));
     }
@@ -117,7 +65,7 @@ const Register = () => {
     <View style={styles.container}>
       <TextInput
         style={styles.inputStyle}
-        placeholder="Name"
+        placeholder="Meet Name"
         value={displayName}
         onChangeText={(text) => setDisplayName(text)}
         placeholderTextColor="white"
@@ -144,20 +92,20 @@ const Register = () => {
         maxLength={15}
         secureTextEntry={true}
       />
-      <Button color="#3740FE" title="Sign up" onPress={() => registerUser()} />
+      <Button color="#3740FE" title="Sign up" onPress={() => registerHost()} />
 
       <Text
         style={styles.loginText}
         onPress={() => navigation.navigate("Login")}
       >
-        Already have an account? Login
+        Already Registered? Click here to login
       </Text>
 
       <Text
         style={styles.loginText}
-        onPress={() => navigation.navigate("HostApplication")}
+        onPress={() => navigation.navigate("Register")}
       >
-        Want to host your own meets? Apply here.
+        Back to user sign up
       </Text>
     </View>
   );

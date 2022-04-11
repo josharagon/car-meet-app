@@ -137,6 +137,10 @@ const WelcomeNewUser = ({ name, setAccountType }) => {
     }
   };
 
+  const logOut = () => {
+    firebase.auth().signOut();
+  };
+
   const handleGarageList = () => {
     return garage.map((car, index) => {
       return {
@@ -517,6 +521,13 @@ const WelcomeNewUser = ({ name, setAccountType }) => {
           >
             Next
           </Button>
+          <Button
+            color="#A84032"
+            title="Log Out"
+            onPress={() => {
+              console.log(firebase.auth().currentUser);
+            }}
+          />
         </Animated.ScrollView>
       )}
       {page === 2 && (
