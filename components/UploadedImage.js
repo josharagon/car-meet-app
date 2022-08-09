@@ -10,13 +10,16 @@ const UploadedImage = ({ image, setImages, images, index }) => {
         justifyContent: "center",
         alignItems: "center",
         margin: 15,
+        width: 200,
+        height: 200,
       }}
     >
       <Image
         source={{ uri: image }}
+        resizeMode="contain"
         style={{
-          width: 200,
-          height: 200,
+          width: "100%",
+          height: "100%",
         }}
       ></Image>
       <View style={{ position: "absolute", top: 5, right: 10 }}>
