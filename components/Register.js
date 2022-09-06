@@ -69,6 +69,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { Icon } from "react-native-elements";
 import firebase from "firebase";
 
 import Login from "./Login";
@@ -115,6 +116,18 @@ const Register = () => {
   }
   return (
     <View style={styles.container}>
+      <Icon
+        name="arrow-left"
+        type="font-awesome"
+        color="white"
+        size={25}
+        style={{
+          alignSelf: "left",
+        }}
+        onPress={() => {
+          navigation.goBack();
+        }}
+      />
       <TextInput
         style={styles.inputStyle}
         placeholder="Name"
@@ -170,7 +183,7 @@ const styles = StyleSheet.create({
     flex: 1,
     display: "flex",
     flexDirection: "column",
-    justifyContent: "center",
+    justifyContent: "space-evenly",
     padding: 35,
     backgroundColor: "#202020",
   },

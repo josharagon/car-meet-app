@@ -52,11 +52,13 @@ const Login = ({ loggedIn, setLoggedIn }) => {
       <Icon
         name="arrow-left"
         type="font-awesome"
-        color="#9E9E9E"
+        color="white"
         size={25}
         style={{
-          position: "absolute",
-          top: "5%",
+          alignSelf: "left",
+        }}
+        onPress={() => {
+          navigation.goBack();
         }}
       />
       <TextInput
@@ -97,7 +99,7 @@ const styles = StyleSheet.create({
     flex: 1,
     display: "flex",
     flexDirection: "column",
-    justifyContent: "center",
+    justifyContent: "space-evenly",
     padding: 35,
     backgroundColor: "#202020",
   },
