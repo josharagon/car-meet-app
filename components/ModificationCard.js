@@ -9,8 +9,9 @@ import {
   Dimensions,
   Image,
 } from "react-native";
+import { MaterialCommunityIcons } from "react-native-vector-icons";
 
-const ModificationCard = ({ type, name }) => {
+const ModificationCard = ({ type, name, setMods, mods, index }) => {
   const windowWidth = Dimensions.get("window").width;
   const windowHeight = Dimensions.get("window").height;
   console.log(type, name + " " + "logged");
@@ -57,6 +58,14 @@ const ModificationCard = ({ type, name }) => {
       }}
     >
       {/* width 6.25 height 11.1166666667 */}
+      <MaterialCommunityIcons
+        name="close-circle"
+        color={"white"}
+        size={"18vw"}
+        onPress={() => {
+          setMods(mods.filter((_, i) => i !== index));
+        }}
+      />
       <Image
         source={allParts[type].url}
         style={{

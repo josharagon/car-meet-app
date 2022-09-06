@@ -979,7 +979,7 @@ const WelcomeNewUser = ({ name, setAccountType }) => {
               marginBottom: 100,
             }}
           >
-            {carModifications.map((modification) => {
+            {carModifications.map((modification, index) => {
               return (
                 <ModificationCard
                   onPress={() => {
@@ -989,6 +989,9 @@ const WelcomeNewUser = ({ name, setAccountType }) => {
                   type={modification.type.replace(/ /g, "")}
                   name={modification.name}
                   key={modification.name}
+                  mods={carModifications}
+                  setMods={setCarModifications}
+                  index={index}
                 />
               );
             })}
