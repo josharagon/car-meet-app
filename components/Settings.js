@@ -12,12 +12,13 @@ import { Searchbar } from "react-native-paper";
 import firebase from "firebase";
 import { Icon } from "react-native-elements";
 import SettingTab from "./SettingTab";
+import { useNavigation } from "@react-navigation/native";
 
-const Settings = ({ navigation }) => {
+const Settings = ({}) => {
   const logOut = () => {
     firebase.auth().signOut();
   };
-
+  const navigation = useNavigation();
   const windowWidth = Dimensions.get("window").width;
   const windowHeight = Dimensions.get("window").height;
 

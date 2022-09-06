@@ -76,7 +76,9 @@ const Tabs = ({ currentDriver }) => {
             />
           ),
         }}
-        children={() => <ProfileStackScreen accountData={accountStuff} />}
+        children={() => (
+          <ProfileStackScreen accountData={accountStuff} navigation={null} />
+        )}
         // initialParams={{ accountData: accountStuff }}
         // component={ProfileStackScreen}
       />

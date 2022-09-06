@@ -1054,7 +1054,7 @@ const WelcomeNewUser = ({ name, setAccountType }) => {
               setPage(page - 1);
             }}
           />
-          <Text
+          {/* <Text
             style={{
               textAlign: "center",
               color: "#ffffff",
@@ -1062,12 +1062,8 @@ const WelcomeNewUser = ({ name, setAccountType }) => {
             }}
           >
             preview your profile
-          </Text>
-          <UserProfile
-            navigation={null}
-            garageArr={garage}
-            userName={userName}
-          />
+          </Text> */}
+          <UserProfile garageArr={garage} userName={userName} />
           {!isUploading ? (
             <Button
               onPress={() => {

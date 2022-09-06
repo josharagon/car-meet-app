@@ -58,14 +58,17 @@ const ModificationCard = ({ type, name, setMods, mods, index }) => {
       }}
     >
       {/* width 6.25 height 11.1166666667 */}
-      <MaterialCommunityIcons
-        name="close-circle"
-        color={"white"}
-        size={"18vw"}
-        onPress={() => {
-          setMods(mods.filter((_, i) => i !== index));
-        }}
-      />
+
+      {mods && (
+        <MaterialCommunityIcons
+          name="close-circle"
+          color={"white"}
+          size={"18vw"}
+          onPress={() => {
+            setMods(mods.filter((_, i) => i !== index));
+          }}
+        />
+      )}
       <Image
         source={allParts[type].url}
         style={{

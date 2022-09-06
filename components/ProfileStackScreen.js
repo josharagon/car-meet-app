@@ -39,6 +39,7 @@ const ProfileStackScreen = ({ accountData, navigation }) => {
         name="Settings"
         options={{ headerShown: false }}
         component={Settings}
+        // navigation={null}
       />
     </ProfileStack.Navigator>
   );
